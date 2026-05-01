@@ -1,0 +1,53 @@
+<section class="hero">
+  <div class="overlay"></div>
+
+  <div class="content container">
+    <h1>Timeless Elegance</h1>
+    <p>Crafted with precision. Designed to shine forever.</p>
+
+    <div class="actions">
+      <button class="btn-primary" routerLink="/shop">Shop Now</button>
+      <button class="btn-outline">Explore Collection</button>
+    </div>
+  </div>
+</section>
+<section class="products container">
+  <div class="section-header">
+    <h2>Featured Collection</h2>
+    <p>Discover pieces crafted for timeless beauty</p>
+  </div>
+
+  <div class="grid">
+    @for (item of products; track item.name) {
+      <div class="product-card">
+        <div class="image-wrapper">
+          <!-- Main Image -->
+          <img class="main-img" [src]="item.image" alt="" />
+
+          <!-- Hover Image -->
+          <img class="hover-img" [src]="item.hoverImage" alt="" />
+
+          <!-- Overlay Actions -->
+          <div class="overlay-actions">
+            <button class="quick-view">Quick View</button>
+            <button class="add-cart" (click)="addToCart(item); $event.stopPropagation()">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <!-- Product Info -->
+        <div class="info">
+          <h3>{{ item.name }}</h3>
+          <p class="price">Rs {{ item.price }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+@if (showToast) {
+  <div class="toast show">
+    ✓ Added to cart
+  </div>
+}

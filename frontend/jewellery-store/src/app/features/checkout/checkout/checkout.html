@@ -1,0 +1,55 @@
+<section class="checkout container">
+  <h2>Checkout</h2>
+
+  <div class="checkout-grid">
+
+    <!-- LEFT: FORM -->
+    <div class="form">
+
+      <h3>Shipping Details</h3>
+
+      <div class="field">
+        <input type="text" placeholder="Full Name">
+      </div>
+
+      <div class="field">
+        <input type="text" placeholder="Phone Number">
+      </div>
+
+      <div class="field">
+        <input type="text" placeholder="Address">
+      </div>
+
+      <div class="field">
+        <input type="text" placeholder="City">
+      </div>
+
+      <button class="btn-primary full">
+        Place Order
+      </button>
+
+    </div>
+
+    <!-- RIGHT: ORDER SUMMARY -->
+    <div class="summary">
+
+      <h3>Your Order</h3>
+
+      @for (item of cartService.getItems(); track item.name) {
+        <div class="item">
+          <span>{{ item.name }} × {{ item.quantity }}</span>
+          <span>Rs {{ item.price * item.quantity }}</span>
+        </div>
+      }
+
+      <div class="divider"></div>
+
+      <div class="total">
+        <span>Total</span>
+        <strong>Rs {{ total }}</strong>
+      </div>
+
+    </div>
+
+  </div>
+</section>

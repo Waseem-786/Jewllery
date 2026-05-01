@@ -1,0 +1,31 @@
+<header class="header">
+  <!-- Logo -->
+  <div class="logo" routerLink="/">AURUM</div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <a routerLink="/" routerLinkActive="active">Home</a>
+    <a routerLink="/shop" routerLinkActive="active">Shop</a>
+    <a routerLink="/about" routerLinkActive="active">About</a>
+  </nav>
+
+  <!-- Actions -->
+  <div class="actions">
+
+    <!-- Search (placeholder for now) -->
+    <button class="icon-btn">🔍</button>
+
+    <!-- Cart with badge -->
+<div class="cart-icon" routerLink="/cart">
+  🛒
+
+  @if (cartService.getTotalQuantity() > 0) {
+    <span class="badge">
+      {{ cartService.getTotalQuantity() }}
+    </span>
+  }
+
+</div>
+
+  </div>
+</header>

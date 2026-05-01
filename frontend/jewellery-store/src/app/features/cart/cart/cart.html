@@ -1,0 +1,57 @@
+<section class="cart container">
+  <h2>Your Cart</h2>
+
+  @if (items.length === 0) {
+    <div class="empty">
+      <p>Your cart is empty</p>
+      <button class="btn-outline" routerLink="/shop">Continue Shopping</button>
+    </div>
+  } @else {
+
+    @for (item of items; track item.name) {
+      <div class="cart-item">
+
+        <!-- LEFT: IMAGE -->
+        <div class="left">
+          <img [src]="item.image" alt="">
+        </div>
+
+        <!-- RIGHT: DETAILS -->
+        <div class="right">
+
+          <div class="top">
+            <h3>{{ item.name }}</h3>
+            <button class="remove" (click)="confirmRemove(item)">Remove</button>
+          </div>
+
+          <p class="price">Rs {{ item.price }}</p>
+
+          <div class="bottom">
+            <div class="qty">
+              Qty: {{ item.quantity }}
+            </div>
+
+            <div class="total">
+              Rs {{ item.price * item.quantity }}
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    }
+
+    <!-- SUMMARY -->
+    <div class="summary">
+      <div class="row">
+        <span>Total</span>
+        <strong>Rs {{ total }}</strong>
+      </div>
+
+      <button class="btn-primary full" routerLink="/checkout">
+        Proceed to Checkout
+      </button>
+    </div>
+
+  }
+</section>

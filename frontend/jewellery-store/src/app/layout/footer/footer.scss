@@ -1,0 +1,76 @@
+.footer {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-xl);
+
+  background: #0b0b0b;
+  color: #ffffff;
+
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Layout */
+.footer-inner {
+  display: grid;
+  grid-template-columns: 1.5fr 2fr;
+  gap: 80px;
+}
+
+/* Brand */
+.brand h2 {
+  font-size: 26px;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+
+  color: var(--color-primary); /* GOLD */
+}
+
+.brand p {
+  color: rgba(255,255,255,0.7);
+  max-width: 320px;
+  font-size: 14px;
+}
+
+/* Links */
+.links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 50px;
+}
+
+.links h4 {
+  font-size: 13px;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+
+  color: rgba(255,255,255,0.9);
+}
+
+/* Links styling */
+.links a {
+  display: block;
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+
+  margin-bottom: 10px;
+  cursor: pointer;
+
+  transition: var(--transition);
+}
+
+/* Gold hover */
+.links a:hover {
+  color: var(--color-primary);
+  transform: translateX(3px);
+}
+
+/* Bottom */
+.footer-bottom {
+  text-align: center;
+  margin-top: var(--space-lg);
+  padding: 20px 0;
+
+  border-top: 1px solid rgba(255,255,255,0.08);
+
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+}
