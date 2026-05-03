@@ -1,0 +1,308 @@
+/* =========================
+   PRODUCTS HERO (SLIDER)
+========================= */
+.products-hero {
+  position: relative;
+  height: 80vh;
+  min-height: 600px;
+
+  display: flex;
+  align-items: center;
+
+  overflow: hidden;
+  color: white;
+}
+
+/* SLIDER */
+.slider {
+  position: absolute;
+  inset: 0;
+}
+
+.slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  opacity: 0;
+  animation: slideFade 18s infinite;
+}
+
+.slide:nth-child(1) { animation-delay: 0s; }
+.slide:nth-child(2) { animation-delay: 2s; }
+.slide:nth-child(3) { animation-delay: 4s; }
+
+@keyframes slideFade {
+  0%   { opacity: 0; transform: scale(1); }
+  10%  { opacity: 1; }
+  30%  { opacity: 1; transform: scale(1.05); }
+  40%  { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* OVERLAY */
+.products-hero .overlay {
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    to right,
+    rgba(0,0,0,0.75) 20%,
+    rgba(0,0,0,0.5) 50%,
+    rgba(0,0,0,0.2) 100%
+  );
+
+  z-index: 1;
+}
+
+/* CONTENT */
+.products-hero .content {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+}
+
+.products-hero .label {
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: var(--color-primary);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.products-hero h1 {
+  font-size: 64px;
+  margin-bottom: 18px;
+}
+
+.products-hero p {
+  font-size: 17px;
+  color: rgba(255,255,255,0.85);
+}
+
+/* =========================
+   FILTER BAR
+========================= */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin: 30px 0 20px;
+}
+
+.filter-bar span {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--color-muted);
+}
+
+.filter-bar button {
+  padding: 6px 14px;
+
+  border: 1px solid var(--color-border);
+  background: white;
+
+  font-size: 12px;
+  letter-spacing: 1px;
+
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.filter-bar .active {
+  background: black;
+  color: white;
+  border-color: black;
+}
+
+.filter-bar button:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* =========================
+   PRODUCT GRID
+========================= */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+
+  align-items: stretch; /* 🔥 ensures equal height */
+}
+
+/* =========================
+   PRODUCT CARD
+========================= */
+.card {
+  display: flex;
+  flex-direction: column;
+
+  height: 100%; /* 🔥 equal height */
+
+  position: relative;
+  padding: 14px;
+
+  border: 1px solid var(--color-border);
+  background: white;
+
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+}
+
+/* BADGE */
+.badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+
+  z-index: 3;
+
+  font-size: 10px;
+  letter-spacing: 1px;
+
+  background: black;
+  color: white;
+
+  padding: 4px 10px;
+}
+
+/* IMAGE */
+.image {
+  background: #f8f5ef;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.image img {
+  width: 100%;
+  transition: transform 0.4s ease;
+}
+
+.card:hover img {
+  transform: scale(1.06);
+}
+
+/* INFO */
+.info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info h3 {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* GOLD PRICE */
+.price {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+/* DESCRIPTION */
+.desc {
+  font-size: 12px;
+  color: var(--color-muted);
+  margin: 8px 0 12px;
+  line-height: 1.5;
+
+  min-height: 40px;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* =========================
+   FEATURES
+========================= */
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  margin-bottom: 14px;
+
+  min-height: 60px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 12px;
+  color: #444;
+}
+
+.feature-item i {
+  font-size: 11px;
+  color: var(--color-primary);
+}
+
+/* =========================
+   CTA BUTTON
+========================= */
+.cta {
+  margin-top: auto; /* 🔥 pushes button down */
+
+  width: 100%;
+  background: black;
+  color: white;
+
+  border: none;
+  padding: 10px;
+
+  font-size: 12px;
+  letter-spacing: 1px;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cta:hover {
+  background: var(--color-primary);
+  color: black;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .products-hero h1 {
+    font-size: 48px;
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .products-hero {
+    height: auto;
+    padding: 60px 0;
+  }
+
+  .products-hero h1 {
+    font-size: 34px;
+  }
+
+  .products-hero p {
+    font-size: 14px;
+  }
+}

@@ -21,4 +21,14 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/checkout/checkout/checkout').then(m => m.Checkout),
   },
+  {
+  path: 'signin',
+  loadComponent: () =>
+    import('./features/auth/signin/signin').then(m => m.Signin),
+},
+{
+  path: 'signup',
+  loadComponent: () =>
+    import('./features/auth/signup/signup').then(m => m.Signup),
+}
 ];

@@ -1,1 +1,77 @@
-<p>products works!</p>
+<section class="shop container">
+
+  <!-- INTRO -->
+<section class="products-hero">
+
+  <!-- SLIDER -->
+  <div class="slider">
+    <img src="assets/1bg.png" class="slide">
+    <img src="assets/2bg.png" class="slide">
+    <img src="assets/3bg.png" class="slide">
+  </div>
+
+  <!-- OVERLAY -->
+  <div class="overlay"></div>
+
+  <!-- CONTENT -->
+  <div class="content container">
+    <span class="label">COLLECTION</span>
+
+    <h1>Our Jewellery</h1>
+
+    <p>
+      Explore a curated selection of timeless pieces crafted with precision,
+      designed to elevate your elegance and style.
+    </p>
+  </div>
+
+</section>
+
+  <!-- FILTER -->
+  <div class="filter-bar">
+    <span>FILTER</span>
+
+    <button (click)="setCategory('all')" [class.active]="selectedCategory==='all'">All</button>
+    <button (click)="setCategory('ring')" [class.active]="selectedCategory==='ring'">Rings</button>
+    <button (click)="setCategory('necklace')" [class.active]="selectedCategory==='necklace'">Necklaces</button>
+    <button (click)="setCategory('earring')" [class.active]="selectedCategory==='earring'">Earrings</button>
+  </div>
+
+  <!-- PRODUCTS -->
+  <div class="grid">
+
+    @for (item of filteredProducts; track item.name) {
+      <div class="card">
+
+        <span class="badge">{{ item.badge }}</span>
+
+        <div class="image">
+          <img [src]="item.image" alt="">
+        </div>
+
+        <div class="info">
+          <h3>{{ item.name }}</h3>
+          <p class="price">Rs {{ item.price }}</p>
+        </div>
+
+        <p class="desc">{{ item.description }}</p>
+
+<div class="features">
+  @for (f of item.features; track f) {
+    <div class="feature-item">
+      <i class="fa-solid fa-gem"></i>
+      <span>{{ f }}</span>
+    </div>
+  }
+</div>
+
+        <button class="cta" (click)="addToCart(item)">
+          Add to Cart
+        </button>
+
+      </div>
+    }
+
+  </div>
+
+</section>

@@ -1,0 +1,45 @@
+<section class="auth">
+
+  <div class="auth-box">
+
+    <span class="brand">AURUM</span>
+
+    <h2>Welcome Back</h2>
+    <p class="subtitle">
+      Sign in to continue your luxury experience
+    </p>
+
+    <!-- SOCIAL -->
+    <div class="social-login">
+      <button class="google-btn">
+        <i class="fa-brands fa-google"></i>
+        Continue with Google
+      </button>
+
+      <button class="apple-btn">
+        <i class="fa-brands fa-apple"></i>
+        Continue with Apple
+      </button>
+    </div>
+
+    <div class="divider">
+      <span>or</span>
+    </div>
+
+    <!-- FORM -->
+    <input type="email" placeholder="Email Address" [(ngModel)]="email" />
+    <input type="password" placeholder="Password" [(ngModel)]="password" />
+
+    <button class="primary-btn" (click)="login()">Sign In</button>
+
+    <div class="links">
+      <span>Forgot Password?</span>
+    </div>
+
+    <p class="extra">
+      Don’t have an account? <span class="link">Register</span>
+    </p>
+
+  </div>
+
+</section>

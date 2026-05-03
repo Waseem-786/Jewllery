@@ -1,0 +1,49 @@
+<section class="auth">
+
+  <div class="auth-box">
+
+    <span class="brand">AURUM</span>
+
+    <h2>Create Account</h2>
+    <p class="subtitle">
+      Join us and explore timeless luxury
+    </p>
+
+    <!-- SOCIAL -->
+    <div class="social-login">
+      <button class="google-btn">
+        <i class="fa-brands fa-google"></i>
+        Continue with Google
+      </button>
+
+      <button class="apple-btn">
+        <i class="fa-brands fa-apple"></i>
+        Continue with Apple
+      </button>
+    </div>
+
+    <div class="divider">
+      <span>or</span>
+    </div>
+
+    <!-- FORM -->
+    <input type="text" placeholder="Full Name" [(ngModel)]="name" />
+
+    <input type="email" placeholder="Email Address" [(ngModel)]="email" />
+
+    <input type="password" placeholder="Password" [(ngModel)]="password" />
+
+    <input type="password" placeholder="Confirm Password" [(ngModel)]="confirmPassword" />
+
+    <button class="primary-btn" (click)="register()">
+      Create Account
+    </button>
+
+    <p class="extra">
+      Already have an account? 
+      <span class="link">Sign In</span>
+    </p>
+
+  </div>
+
+</section>
