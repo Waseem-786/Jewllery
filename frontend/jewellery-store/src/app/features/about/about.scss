@@ -1,0 +1,167 @@
+/* =========================
+   HERO
+========================= */
+.hero {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.hero .bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero .overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(0,0,0,0.4),
+    rgba(0,0,0,0.7)
+  );
+}
+
+.hero-content {
+  position: absolute;
+  bottom: 80px;
+  color: white;
+}
+
+.label {
+  color: var(--color-primary);
+  letter-spacing: 3px;
+  font-size: 12px;
+}
+
+.hero h1 {
+  font-size: 60px;
+  max-width: 600px;
+}
+
+.hero p {
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+/* =========================
+   STORY
+========================= */
+.story {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  padding: 80px 0;
+  align-items: center;
+}
+
+.story img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.story h2 {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.story p {
+  color: var(--color-muted);
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+
+/* =========================
+   IMMERSIVE
+========================= */
+.immersive {
+  position: relative;
+  height: 60vh;
+  overflow: hidden;
+}
+
+.immersive img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.center-text {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  color: white;
+  text-align: center;
+}
+
+.center-text h2 {
+  font-size: 36px;
+}
+
+/* =========================
+   VALUES
+========================= */
+.values {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  padding: 80px 0;
+}
+
+.value img {
+  width: 100%;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+
+.value h3 {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.value p {
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+/* =========================
+   FINAL
+========================= */
+.final {
+  background: black;
+  color: white;
+  text-align: center;
+  padding: 80px 0;
+}
+
+.final h2 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 900px) {
+
+  .story {
+    grid-template-columns: 1fr;
+  }
+
+  .values {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    font-size: 36px;
+  }
+
+  .center-text h2 {
+    font-size: 28px;
+  }
+}

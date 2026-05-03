@@ -9,6 +9,87 @@
 
   color: white;
 }
+/* =========================
+   QUOTE SECTION
+========================= */
+.quote-section {
+  position: relative;
+  height: 60vh;
+  min-height: 400px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+/* Background image */
+.quote-section .bg {
+  position: absolute;
+  inset: 0;
+
+  background: url('/assets/about-immersive.jpg') center/cover no-repeat;
+
+  transform: scale(1.05);
+}
+
+/* Overlay */
+.quote-section .overlay {
+  position: absolute;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* Content */
+.quote-content {
+  position: relative;
+  z-index: 2;
+
+  text-align: center;
+  color: white;
+  max-width: 700px;
+}
+
+/* Quote */
+.quote-content h2 {
+  font-size: 42px;
+  font-weight: 300;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+
+/* Gold divider */
+.quote-content .line {
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: var(--color-primary);
+
+  margin: 20px auto;
+}
+
+/* Brand */
+.quote-content p {
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: var(--color-primary);
+}
+.quote-content {
+  animation: fadeUp 1.2s ease;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 /* ===== Overlay ===== */
 .overlay {
