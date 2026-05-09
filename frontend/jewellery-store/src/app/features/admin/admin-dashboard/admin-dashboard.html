@@ -1,0 +1,563 @@
+<section class="admin">
+
+  <!-- ─── Sidebar ────────────────────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="mark">A</span>
+      <div class="title">
+        <span class="name">Aurum</span>
+        <span class="tag">ADMIN</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button [class.active]="tab()==='overview'"   (click)="setTab('overview')">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6">
+          <rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/>
+          <rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>
+        </svg>
+        Overview
+      </button>
+      <button [class.active]="tab()==='orders'"     (click)="setTab('orders')">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M3 7h18M3 12h18M3 17h12"/>
+        </svg>
+        Orders
+        @if (stats(); as s) { <span class="pill">{{ s.totalOrders }}</span> }
+      </button>
+      <button [class.active]="tab()==='products'"   (click)="setTab('products')">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M21 8l-9-5-9 5 9 5 9-5zM3 13l9 5 9-5M3 18l9 5 9-5"/>
+        </svg>
+        Products
+        <span class="pill">{{ products().length }}</span>
+      </button>
+      <button [class.active]="tab()==='categories'" (click)="setTab('categories')">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+        </svg>
+        Categories
+        <span class="pill">{{ categories().length }}</span>
+      </button>
+      <button [class.active]="tab()==='users'"      (click)="setTab('users')">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6">
+          <circle cx="12" cy="8" r="4"/><path d="M3 21c1.5-4 5-6 9-6s7.5 2 9 6"/>
+        </svg>
+        Customers
+        @if (stats(); as s) { <span class="pill">{{ s.totalUsers }}</span> }
+      </button>
+    </nav>
+
+    <div class="footer">
+      <div class="user-card">
+        <span class="email">{{ auth.auth()?.email }}</span>
+        <span class="role">{{ auth.auth()?.role }}</span>
+      </div>
+      <button class="logout" (click)="logout()">Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- ─── Main ───────────────────────────────────────────────────────────── -->
+  <main class="main">
+
+    @if (status(); as s) {
+      <div class="flash" [class.ok]="s.kind==='ok'" [class.err]="s.kind==='err'">{{ s.msg }}</div>
+    }
+
+    <!-- ───────────────── OVERVIEW ─────────────────────────────────────── -->
+    @if (tab() === 'overview') {
+      <header class="page-head">
+        <div>
+          <span class="eyebrow">DASHBOARD</span>
+          <h1>Overview</h1>
+        </div>
+        <button class="btn-ghost" (click)="loadStats()">Refresh</button>
+      </header>
+
+      @if (loadingStats() && !stats()) {
+        <p class="loading">Loading dashboard…</p>
+      } @else if (stats(); as s) {
+
+        <!-- KPI cards -->
+        <div class="kpi-grid">
+          <div class="kpi">
+            <span class="kpi-label">Total Revenue</span>
+            <span class="kpi-value">{{ formatCurrency(s.totalRevenue) }}</span>
+            <span class="kpi-sub">+{{ formatCurrency(s.revenueLast7Days) }} last 7 days</span>
+          </div>
+          <div class="kpi">
+            <span class="kpi-label">Pending Revenue</span>
+            <span class="kpi-value">{{ formatCurrency(s.pendingRevenue) }}</span>
+            <span class="kpi-sub">awaiting payment</span>
+          </div>
+          <div class="kpi">
+            <span class="kpi-label">Total Orders</span>
+            <span class="kpi-value">{{ s.totalOrders }}</span>
+            <span class="kpi-sub">+{{ s.ordersLast7Days }} this week</span>
+          </div>
+          <div class="kpi">
+            <span class="kpi-label">Customers</span>
+            <span class="kpi-value">{{ s.totalUsers }}</span>
+            <span class="kpi-sub">{{ s.totalProducts }} products · {{ s.totalCategories }} categories</span>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="chart-grid">
+          <div class="card span-2">
+            <header class="card-head">
+              <div>
+                <span class="card-eyebrow">REVENUE</span>
+                <h3>Last 14 days</h3>
+              </div>
+              <span class="card-meta">{{ formatCurrency(s.revenueLast7Days) }} · 7d</span>
+            </header>
+            <app-line-chart [points]="revenueSeries()" valuePrefix="Rs "/>
+          </div>
+
+          <div class="card">
+            <header class="card-head">
+              <div>
+                <span class="card-eyebrow">ORDER STATUS</span>
+                <h3>Distribution</h3>
+              </div>
+            </header>
+            <app-donut-chart [data]="statusDonut()" centerLabel="ORDERS"/>
+          </div>
+
+          <div class="card">
+            <header class="card-head">
+              <div>
+                <span class="card-eyebrow">ORDERS / DAY</span>
+                <h3>Volume</h3>
+              </div>
+              <span class="card-meta">{{ s.ordersLast7Days }} · 7d</span>
+            </header>
+            <app-line-chart [points]="orderSeries()"/>
+          </div>
+
+          <div class="card">
+            <header class="card-head">
+              <div>
+                <span class="card-eyebrow">PAYMENT</span>
+                <h3>Status</h3>
+              </div>
+            </header>
+            <app-donut-chart [data]="paymentDonut()" centerLabel="PAYMENTS"/>
+          </div>
+        </div>
+
+        <!-- Lists row -->
+        <div class="list-grid">
+          <div class="card">
+            <header class="card-head">
+              <div>
+                <span class="card-eyebrow">TOP SELLERS</span>
+                <h3>By Quantity</h3>
+              </div>
+            </header>
+            <ul class="rank-list">
+              @for (p of s.topProducts; track p.productId; let i = $index) {
+                <li>
+                  <span class="rank">{{ i + 1 }}</span>
+                  @if (p.imageUrl) {
+                    <img class="thumb" [src]="resolveImage(p.imageUrl)" [alt]="p.name">
+                  } @else {
+                    <span class="thumb thumb-empty"></span>
+                  }
+                  <div class="rank-info">
+                    <span class="rank-name">{{ p.name }}</span>
+                    <span class="rank-meta">{{ p.quantitySold }} sold · {{ formatCurrency(p.revenue) }}</span>
+                  </div>
+                </li>
+              }
+              @if (s.topProducts.length === 0) {
+                <li class="empty-state">No sales yet.</li>
+              }
+            </ul>
+          </div>
+
+          <div class="card">
+            <header class="card-head">
+              <div>
+                <span class="card-eyebrow">RECENT ORDERS</span>
+                <h3>Latest 5</h3>
+              </div>
+              <button class="link" (click)="setTab('orders')">View all →</button>
+            </header>
+            <ul class="recent-list">
+              @for (o of s.recentOrders; track o.id) {
+                <li>
+                  <div class="recent-row-head">
+                    <span class="oid">#{{ o.id }}</span>
+                    <span class="status-tag" [style.color]="statusColors[o.status]" [style.borderColor]="statusColors[o.status]">
+                      {{ o.status }}
+                    </span>
+                  </div>
+                  <div class="recent-row-body">
+                    <span class="cust">{{ o.customerName || o.customerEmail }}</span>
+                    <span class="amt">{{ formatCurrency(o.totalAmount) }}</span>
+                  </div>
+                  <span class="recent-meta">{{ o.createdAt | date:'MMM d, h:mm a' }} · {{ o.itemCount }} items · {{ o.paymentStatus }}</span>
+                </li>
+              }
+              @if (s.recentOrders.length === 0) {
+                <li class="empty-state">No orders yet.</li>
+              }
+            </ul>
+          </div>
+
+          <div class="card">
+            <header class="card-head">
+              <div>
+                <span class="card-eyebrow">LOW STOCK</span>
+                <h3>{{ s.lowStockCount }} items ≤ 5</h3>
+              </div>
+              <button class="link" (click)="setTab('products')">Manage →</button>
+            </header>
+            <ul class="rank-list">
+              @for (p of s.lowStockProducts; track p.id) {
+                <li>
+                  @if (p.imageUrl) {
+                    <img class="thumb" [src]="resolveImage(p.imageUrl)" [alt]="p.name">
+                  } @else {
+                    <span class="thumb thumb-empty"></span>
+                  }
+                  <div class="rank-info">
+                    <span class="rank-name">{{ p.name }}</span>
+                    <span class="rank-meta">{{ p.categoryName }}</span>
+                  </div>
+                  <span class="stock-pill" [class.zero]="p.stock === 0">{{ p.stock }} left</span>
+                </li>
+              }
+              @if (s.lowStockProducts.length === 0) {
+                <li class="empty-state">All stock levels healthy.</li>
+              }
+            </ul>
+          </div>
+        </div>
+      }
+    }
+
+    <!-- ───────────────── ORDERS ──────────────────────────────────────── -->
+    @if (tab() === 'orders') {
+      <header class="page-head">
+        <div>
+          <span class="eyebrow">FULFILMENT</span>
+          <h1>Orders</h1>
+        </div>
+      </header>
+
+      <div class="filter-bar">
+        <div class="status-tabs">
+          <button [class.active]="orderFilter().status === 'All'" (click)="setOrderStatusFilter('All')">All</button>
+          @for (st of statuses; track st) {
+            <button [class.active]="orderFilter().status === st"
+                    [style.borderColor]="orderFilter().status === st ? statusColors[st] : ''"
+                    (click)="setOrderStatusFilter(st)">
+              {{ st }}
+              @if (stats(); as s) { <em>{{ s.orderStatusCounts[st] }}</em> }
+            </button>
+          }
+        </div>
+        <div class="search">
+          <input type="text"
+                 placeholder="Search by order #, email, or txn ref…"
+                 [ngModel]="orderFilter().search"
+                 (ngModelChange)="setOrderSearch($event)"
+                 (keyup.enter)="applyOrderSearch()" />
+          <button class="btn-ghost" (click)="applyOrderSearch()">Search</button>
+        </div>
+      </div>
+
+      @if (loadingOrders()) {
+        <p class="loading">Loading orders…</p>
+      } @else {
+        <div class="card no-pad">
+          <table class="data">
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Placed</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (o of orders(); track o.id) {
+                <tr>
+                  <td class="mono">#{{ o.id }}</td>
+                  <td>
+                    <div class="cell-stack">
+                      <span class="strong">{{ o.customerName || '—' }}</span>
+                      <span class="muted">{{ o.customerEmail }}</span>
+                    </div>
+                  </td>
+                  <td>{{ o.itemCount }}</td>
+                  <td class="strong">{{ formatCurrency(o.totalAmount) }}</td>
+                  <td>
+                    <div class="cell-stack">
+                      <span>{{ o.paymentMethod }}</span>
+                      <span class="muted">{{ o.paymentStatus }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <select class="status-select"
+                            [style.borderColor]="statusColors[o.status]"
+                            [style.color]="statusColors[o.status]"
+                            [ngModel]="o.status"
+                            (ngModelChange)="changeOrderStatus(o, $event)">
+                      @for (st of statuses; track st) {
+                        <option [value]="st">{{ st }}</option>
+                      }
+                    </select>
+                  </td>
+                  <td class="muted">{{ o.createdAt | date:'MMM d, y · h:mm a' }}</td>
+                </tr>
+              }
+              @if (orders().length === 0) {
+                <tr><td colspan="7" class="empty">No orders match this filter.</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    }
+
+    <!-- ───────────────── PRODUCTS ────────────────────────────────────── -->
+    @if (tab() === 'products') {
+      <header class="page-head">
+        <div>
+          <span class="eyebrow">CATALOGUE</span>
+          <h1>Products</h1>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2>{{ productForm().id ? 'Edit Product' : 'New Product' }}</h2>
+        <div class="form-grid">
+          <label>Name
+            <input type="text" [ngModel]="productForm().name" (ngModelChange)="updateProductForm('name', $event)" name="name" />
+          </label>
+          <label>Category
+            <select [ngModel]="productForm().categoryId" (ngModelChange)="updateProductForm('categoryId', $event)" name="categoryId">
+              <option [ngValue]="null">— select —</option>
+              @for (c of categories(); track c.id) {
+                <option [ngValue]="c.id">{{ c.name }}</option>
+              }
+            </select>
+          </label>
+          <label>Price (Rs)
+            <input type="number" [ngModel]="productForm().price" (ngModelChange)="updateProductForm('price', $event)" name="price" />
+          </label>
+          <label>Stock
+            <input type="number" [ngModel]="productForm().stock" (ngModelChange)="updateProductForm('stock', $event)" name="stock" />
+          </label>
+          <label>Weight (g)
+            <input type="number" step="0.1" [ngModel]="productForm().weight" (ngModelChange)="updateProductForm('weight', $event)" name="weight" />
+          </label>
+          <label>Material
+            <input type="text" [ngModel]="productForm().material" (ngModelChange)="updateProductForm('material', $event)" name="material" placeholder="e.g. 22K Gold" />
+          </label>
+          <label>Purity
+            <input type="text" [ngModel]="productForm().purity" (ngModelChange)="updateProductForm('purity', $event)" name="purity" placeholder="e.g. 22K" />
+          </label>
+          <label>Badge
+            <input type="text" [ngModel]="productForm().badge" (ngModelChange)="updateProductForm('badge', $event)" name="badge" placeholder="ROYAL / PREMIUM / SIGNATURE" />
+          </label>
+          <label class="full">Features (comma-separated)
+            <input type="text" [ngModel]="productForm().featuresText" (ngModelChange)="updateProductForm('featuresText', $event)" name="featuresText" placeholder="22K Gold, Certified Diamond, Handcrafted" />
+          </label>
+          <label class="full">Description
+            <textarea rows="3" [ngModel]="productForm().description" (ngModelChange)="updateProductForm('description', $event)" name="description"></textarea>
+          </label>
+          <label class="full">Image
+            <div class="image-row">
+              @if (productForm().imageUrl) {
+                <img class="thumb" [src]="resolveImage(productForm().imageUrl)" alt="preview" />
+              }
+              <input type="file" accept="image/*" (change)="onImagePicked($event)" />
+              <input type="text" class="url-input" [ngModel]="productForm().imageUrl" (ngModelChange)="updateProductForm('imageUrl', $event)" name="imageUrl" placeholder="…or paste an image URL" />
+            </div>
+            @if (uploading()) { <span class="hint">Uploading…</span> }
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" [ngModel]="productForm().isFeatured" (ngModelChange)="updateProductForm('isFeatured', $event)" name="isFeatured" />
+            Featured on homepage
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-primary" (click)="saveProduct()">{{ productForm().id ? 'Update' : 'Create' }}</button>
+          @if (productForm().id) {
+            <button class="btn-ghost" (click)="resetProductForm()">Cancel edit</button>
+          }
+        </div>
+      </section>
+
+      <section class="card no-pad">
+        <header class="card-head pad">
+          <h3>All Products</h3>
+        </header>
+        <table class="data">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Badge</th>
+              <th>Featured</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (p of products(); track p.id) {
+              <tr>
+                <td>
+                  @if (p.imageUrl) {
+                    <img class="thumb-sm" [src]="resolveImage(p.imageUrl)" [alt]="p.name" />
+                  }
+                </td>
+                <td class="strong">{{ p.name }}</td>
+                <td class="muted">{{ p.categoryName }}</td>
+                <td>{{ formatCurrency(p.price) }}</td>
+                <td>
+                  <span class="stock-pill" [class.zero]="p.stock === 0" [class.low]="p.stock > 0 && p.stock <= 5">
+                    {{ p.stock }}
+                  </span>
+                </td>
+                <td class="muted">{{ p.badge }}</td>
+                <td>{{ p.isFeatured ? '✓' : '' }}</td>
+                <td class="actions">
+                  <button class="btn-ghost sm" (click)="editProduct(p)">Edit</button>
+                  <button class="btn-danger sm" (click)="deleteProduct(p)">Delete</button>
+                </td>
+              </tr>
+            }
+            @if (products().length === 0) {
+              <tr><td colspan="8" class="empty">No products yet.</td></tr>
+            }
+          </tbody>
+        </table>
+      </section>
+    }
+
+    <!-- ───────────────── CATEGORIES ────────────────────────────────── -->
+    @if (tab() === 'categories') {
+      <header class="page-head">
+        <div>
+          <span class="eyebrow">TAXONOMY</span>
+          <h1>Categories</h1>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2>{{ categoryForm().id ? 'Edit Category' : 'New Category' }}</h2>
+        <div class="form-grid">
+          <label>Name
+            <input type="text" [ngModel]="categoryForm().name" (ngModelChange)="updateCategoryForm('name', $event)" name="cname" />
+          </label>
+          <label>Image URL
+            <input type="text" [ngModel]="categoryForm().imageUrl" (ngModelChange)="updateCategoryForm('imageUrl', $event)" name="cimg" />
+          </label>
+          <label class="full">Description
+            <textarea rows="2" [ngModel]="categoryForm().description" (ngModelChange)="updateCategoryForm('description', $event)" name="cdesc"></textarea>
+          </label>
+        </div>
+        <div class="form-actions">
+          <button class="btn-primary" (click)="saveCategory()">{{ categoryForm().id ? 'Update' : 'Create' }}</button>
+          @if (categoryForm().id) {
+            <button class="btn-ghost" (click)="resetCategoryForm()">Cancel edit</button>
+          }
+        </div>
+      </section>
+
+      <section class="card no-pad">
+        <header class="card-head pad">
+          <h3>All Categories</h3>
+        </header>
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Products</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (c of categories(); track c.id) {
+              <tr>
+                <td class="strong">{{ c.name }}</td>
+                <td class="muted">{{ c.description }}</td>
+                <td>{{ c.productCount }}</td>
+                <td class="actions">
+                  <button class="btn-ghost sm" (click)="editCategory(c)">Edit</button>
+                  <button class="btn-danger sm" (click)="deleteCategory(c)">Delete</button>
+                </td>
+              </tr>
+            }
+            @if (categories().length === 0) {
+              <tr><td colspan="4" class="empty">No categories yet.</td></tr>
+            }
+          </tbody>
+        </table>
+      </section>
+    }
+
+    <!-- ───────────────── USERS ──────────────────────────────────────── -->
+    @if (tab() === 'users') {
+      <header class="page-head">
+        <div>
+          <span class="eyebrow">CLIENTELE</span>
+          <h1>Customers</h1>
+        </div>
+        <button class="btn-ghost" (click)="loadUsers()">Refresh</button>
+      </header>
+
+      <div class="card no-pad">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Orders</th>
+              <th>Total Spent</th>
+              <th>Last Order</th>
+              <th>Joined</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (u of users(); track u.id) {
+              <tr>
+                <td class="strong">{{ u.fullName }}</td>
+                <td class="muted">{{ u.email }}</td>
+                <td>
+                  <span class="role-pill" [class.admin]="u.role === 'Admin'">{{ u.role }}</span>
+                </td>
+                <td>{{ u.orderCount }}</td>
+                <td class="strong">{{ formatCurrency(u.totalSpent) }}</td>
+                <td class="muted">
+                  {{ u.lastOrderAt ? (u.lastOrderAt | date:'MMM d, y') : '—' }}
+                </td>
+                <td class="muted">{{ u.createdAt | date:'MMM d, y' }}</td>
+              </tr>
+            }
+            @if (users().length === 0) {
+              <tr><td colspan="7" class="empty">No customers yet.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+  </main>
+
+</section>

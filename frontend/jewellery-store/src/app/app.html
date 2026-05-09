@@ -1,11 +1,13 @@
 <div class="app-layout">
 
-  <app-header></app-header>
+  @if (showChrome()) { <app-header></app-header> }
 
   <main class="main-content">
     <router-outlet></router-outlet>
   </main>
 
-  <app-footer></app-footer>
+  @if (showChrome()) { <app-footer></app-footer> }
+
+  <app-toast-container></app-toast-container>
 
 </div>

@@ -1,8 +1,10 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { authInterceptor } from './core/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -11,9 +13,14 @@ export const appConfig: ApplicationConfig = {
     provideRouter(
       routes,
       withInMemoryScrolling({
-        scrollPositionRestoration: 'top',   // 🔥 FIX
-        anchorScrolling: 'enabled'          // optional but useful
+        scrollPositionRestoration: 'top',
+        anchorScrolling: 'enabled'
       })
+    ),
+
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([authInterceptor])
     ),
 
     provideClientHydration(withEventReplay())

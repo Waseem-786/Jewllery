@@ -1,56 +1,77 @@
 <section class="cart container">
-  <h2>Your Cart</h2>
 
-  @if (items.length === 0) {
+  <header class="cart-header">
+    <span class="eyebrow">YOUR SELECTION</span>
+    <h2>The Cart</h2>
+  </header>
+
+  @if (cartService.getItems().length === 0) {
     <div class="empty">
-      <p>Your cart is empty</p>
+      <p class="empty-line">Your cart is currently empty.</p>
       <button class="btn-outline" routerLink="/shop">Continue Shopping</button>
     </div>
   } @else {
 
-    @for (item of items; track item.name) {
-      <div class="cart-item">
+    <div class="cart-grid">
 
-        <!-- LEFT: IMAGE -->
-        <div class="left">
-          <img [src]="item.image" alt="">
-        </div>
+      <!-- ITEMS -->
+      <div class="items">
+        @for (item of cartService.getItems(); track item.productId) {
+          <article class="cart-item">
 
-        <!-- RIGHT: DETAILS -->
-        <div class="right">
-
-          <div class="top">
-            <h3>{{ item.name }}</h3>
-            <button class="remove" (click)="confirmRemove(item)">Remove</button>
-          </div>
-
-          <p class="price">Rs {{ item.price }}</p>
-
-          <div class="bottom">
-            <div class="qty">
-              Qty: {{ item.quantity }}
+            <div class="thumb">
+              <img [src]="item.image" [alt]="item.name">
             </div>
 
-            <div class="total">
-              Rs {{ item.price * item.quantity }}
-            </div>
-          </div>
+            <div class="details">
+              <div class="line top">
+                <h3>{{ item.name }}</h3>
+                <button class="remove" (click)="remove(item)" aria-label="Remove from cart">Remove</button>
+              </div>
 
+              <p class="price">Rs {{ item.price }}</p>
+
+              <div class="line bottom">
+                <div class="qty-control">
+                  <button class="qty-btn" (click)="dec(item)" aria-label="Decrease quantity">−</button>
+                  <span class="qty-value">{{ item.quantity }}</span>
+                  <button class="qty-btn" (click)="inc(item)" aria-label="Increase quantity">+</button>
+                </div>
+                <span class="total">Rs {{ item.price * item.quantity }}</span>
+              </div>
+            </div>
+
+          </article>
+        }
+      </div>
+
+      <!-- SUMMARY -->
+      <aside class="summary">
+        <h3>Order Summary</h3>
+
+        <div class="row">
+          <span>Subtotal</span>
+          <span>Rs {{ cartService.getTotalPrice() }}</span>
+        </div>
+        <div class="row">
+          <span>Shipping</span>
+          <span class="muted">Calculated at checkout</span>
         </div>
 
-      </div>
-    }
+        <div class="divider"></div>
 
-    <!-- SUMMARY -->
-    <div class="summary">
-      <div class="row">
-        <span>Total</span>
-        <strong>Rs {{ total }}</strong>
-      </div>
+        <div class="row total-row">
+          <span>Total</span>
+          <strong>Rs {{ cartService.getTotalPrice() }}</strong>
+        </div>
 
-      <button class="btn-primary full" routerLink="/checkout">
-        Proceed to Checkout
-      </button>
+        <button class="btn-primary full" routerLink="/checkout">
+          Proceed to Checkout
+        </button>
+
+        <a class="continue" routerLink="/shop">← Continue shopping</a>
+      </aside>
+
     </div>
 
   }

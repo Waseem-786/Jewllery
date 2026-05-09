@@ -1,22 +1,30 @@
 <section class="about">
 
   <!-- HERO -->
-  <div class="hero">
-    <img src="assets/f.png" class="bg">
+  <section class="page-hero about-hero">
+    <video class="hero-video"
+           autoplay muted [muted]="true" loop playsinline preload="auto"
+           poster="assets/f.png"
+           (loadedmetadata)="$any($event.target).muted = true; $any($event.target).volume = 0">
+      <source src="assets/videos/Home.mp4" type="video/mp4">
+    </video>
 
-    <div class="overlay"></div>
+    <div class="hero-overlay"></div>
 
     <div class="hero-content container">
-      <span class="label">AURUM</span>
-      <h1>Jewellery That Tells a Story</h1>
-      <p>Crafted with precision. Designed to last beyond time.</p>
+      <span class="hero-eyebrow">THE MAISON</span>
+      <h1>Jewellery That<br>Tells a Story</h1>
+      <p class="hero-sub">Crafted with precision. Designed to last beyond time.</p>
     </div>
-  </div>
+
+    <div class="scroll-cue">OUR STORY</div>
+  </section>
 
   <!-- STORY -->
   <div class="story container">
 
     <div class="text">
+      <span class="eyebrow">OUR PHILOSOPHY</span>
       <h2>Not Just Jewellery</h2>
 
       <p>
@@ -32,16 +40,18 @@
     </div>
 
     <div class="image">
-      <img src="assets/b.png">
+      <img src="assets/b.png" alt="Solitaire ring">
     </div>
 
   </div>
 
   <!-- IMMERSIVE -->
   <div class="immersive">
-    <img src="assets/c.png">
+    <img src="assets/c.png" alt="Crafted by masters">
+    <div class="immersive-overlay"></div>
 
     <div class="center-text">
+      <span class="eyebrow">THE CRAFT</span>
       <h2>Crafted by Masters</h2>
       <p>Every curve, every detail, perfected by skilled artisans.</p>
     </div>
@@ -51,19 +61,19 @@
   <div class="values container">
 
     <div class="value">
-      <img src="assets/a.png">
+      <div class="img-frame"><img src="assets/a.png" alt="Precision"></div>
       <h3>Precision</h3>
       <p>Every detail is refined to perfection.</p>
     </div>
 
     <div class="value">
-      <img src="assets/e.png">
+      <div class="img-frame"><img src="assets/e.png" alt="Elegance"></div>
       <h3>Elegance</h3>
       <p>Designed to remain timeless across generations.</p>
     </div>
 
     <div class="value">
-      <img src="assets/d.png">
+      <div class="img-frame"><img src="assets/d.png" alt="Legacy"></div>
       <h3>Legacy</h3>
       <p>Jewellery that becomes part of your story.</p>
     </div>

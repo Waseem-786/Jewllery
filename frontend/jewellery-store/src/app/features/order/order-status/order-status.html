@@ -1,0 +1,77 @@
+<section class="order-status container">
+
+  @if (loading()) {
+    <p class="status-line">Loading order…</p>
+  } @else {
+
+  <div class="status-card" [class.success]="variant() === 'success'" [class.failure]="variant() === 'failure'">
+
+    <div class="ornament">
+      @if (variant() === 'success') {
+        <svg viewBox="0 0 64 64" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="32" cy="32" r="28"/>
+          <polyline points="20,33 28,42 44,24"/>
+        </svg>
+      } @else {
+        <svg viewBox="0 0 64 64" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="32" cy="32" r="28"/>
+          <line x1="22" y1="22" x2="42" y2="42"/>
+          <line x1="42" y1="22" x2="22" y2="42"/>
+        </svg>
+      }
+    </div>
+
+    <span class="eyebrow">{{ variant() === 'success' ? 'ORDER CONFIRMED' : 'PAYMENT FAILED' }}</span>
+
+    <h1>
+      @if (variant() === 'success') {
+        Thank you, {{ order()?.items?.length ? 'your order is in.' : 'we received your request.' }}
+      } @else {
+        We couldn't process your payment.
+      }
+    </h1>
+
+    @if (order(); as o) {
+      <p class="muted">
+        Order <strong>#{{ o.id }}</strong> · Total <strong>Rs {{ o.totalAmount }}</strong>
+      </p>
+
+      <div class="meta-grid">
+        <div>
+          <span class="label">Payment</span>
+          <span class="value">{{ o.paymentMethod }}{{ o.paymentProvider ? ' · ' + o.paymentProvider : '' }}</span>
+        </div>
+        <div>
+          <span class="label">Status</span>
+          <span class="value">{{ o.paymentStatus }}</span>
+        </div>
+        @if (o.paymentReference) {
+          <div>
+            <span class="label">Reference</span>
+            <span class="value mono">{{ o.paymentReference }}</span>
+          </div>
+        }
+        <div>
+          <span class="label">Shipping</span>
+          <span class="value">{{ o.shippingAddress }}</span>
+        </div>
+      </div>
+
+      @if (variant() === 'success' && o.paymentStatus === 'Paid') {
+        <p class="note">Payment received. We're preparing your piece.</p>
+      } @else if (variant() === 'success' && o.paymentStatus === 'AwaitingProvider') {
+        <p class="note">We're confirming your payment with PayFast — you'll receive an email once cleared.</p>
+      }
+    }
+
+    <div class="actions">
+      <button class="btn-primary" routerLink="/shop">Continue Shopping</button>
+      @if (variant() === 'failure') {
+        <button class="btn-outline" routerLink="/checkout">Try again</button>
+      }
+    </div>
+
+  </div>
+
+  }
+</section>

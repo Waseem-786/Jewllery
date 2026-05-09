@@ -1,5 +1,7 @@
 using GoldJewelryAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Text.Json;
 
 namespace GoldJewelryAPI.Data
 {
@@ -57,6 +59,21 @@ namespace GoldJewelryAPI.Data
             modelBuilder.Entity<OrderItem>()
                 .Property(oi => oi.UnitPrice)
                 .HasPrecision(18, 2);
+
+            // Product.Features stored as JSON string
+            var featuresComparer = new ValueComparer<List<string>>(
+                (a, b) => (a ?? new()).SequenceEqual(b ?? new()),
+                v => v.Aggregate(0, (h, s) => HashCode.Combine(h, s.GetHashCode())),
+                v => v.ToList());
+
+            modelBuilder.Entity<Product>()
+                .Property(p => p.Features)
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+                    v => string.IsNullOrEmpty(v)
+                        ? new List<string>()
+                        : JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) ?? new List<string>())
+                .Metadata.SetValueComparer(featuresComparer);
         }
     }
 }

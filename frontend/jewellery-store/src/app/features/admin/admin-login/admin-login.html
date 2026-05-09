@@ -1,0 +1,24 @@
+<section class="admin-login">
+  <form class="card" (ngSubmit)="submit()" #f="ngForm">
+    <h1>Admin Login</h1>
+    <p class="hint">Sign in with your admin credentials.</p>
+
+    <label>
+      Email
+      <input type="email" name="email" [(ngModel)]="email" required autocomplete="username" />
+    </label>
+
+    <label>
+      Password
+      <input type="password" name="password" [(ngModel)]="password" required autocomplete="current-password" />
+    </label>
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    <button type="submit" [disabled]="busy() || !f.valid">
+      {{ busy() ? 'Signing in…' : 'Sign In' }}
+    </button>
+  </form>
+</section>

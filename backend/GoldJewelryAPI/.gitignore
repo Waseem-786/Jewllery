@@ -1,0 +1,21 @@
+# ─── Build output ─────────────────────────────────────────────────────────
+bin/
+obj/
+
+# ─── User-specific / IDE ──────────────────────────────────────────────────
+*.user
+*.suo
+*.userprefs
+.vs/
+
+# ─── Local environment overrides (PayFast keys, etc.) — never commit ──────
+.env
+appsettings.Development.json
+appsettings.Production.json
+appsettings.Local.json
+
+# ─── Uploaded files (per-deployment, not source) ──────────────────────────
+wwwroot/uploads/
+
+# ─── Logs ─────────────────────────────────────────────────────────────────
+*.log

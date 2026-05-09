@@ -4,7 +4,7 @@
 
   <!-- Navigation -->
   <nav class="nav">
-    <a routerLink="/" routerLinkActive="active">Home</a>
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
     <a routerLink="/shop" routerLinkActive="active">Shop</a>
     <a routerLink="/about" routerLinkActive="active">About</a>
   </nav>
@@ -12,20 +12,27 @@
   <!-- Actions -->
   <div class="actions">
 
-    <!-- Search (placeholder for now) -->
-    <button class="icon-btn">🔍</button>
+    <!-- Auth -->
+    @if (auth.isLoggedIn()) {
+      <div class="account">
+        <span class="hello">Hi, {{ auth.auth()?.fullName?.split(' ')?.[0] }}</span>
+        <button class="text-link" (click)="logout()">Sign Out</button>
+      </div>
+    } @else {
+      <a class="text-link" routerLink="/signin" routerLinkActive="active">Sign In</a>
+      <a class="text-link primary" routerLink="/signup" routerLinkActive="active">Register</a>
+    }
 
     <!-- Cart with badge -->
-<div class="cart-icon" routerLink="/cart">
-  🛒
-
-  @if (cartService.getTotalQuantity() > 0) {
-    <span class="badge">
-      {{ cartService.getTotalQuantity() }}
-    </span>
-  }
-
-</div>
+    <button class="icon-btn cart-icon" routerLink="/cart" aria-label="Cart">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M5 7h14l-1.5 11a2 2 0 0 1-2 1.8H8.5a2 2 0 0 1-2-1.8L5 7z"/>
+        <path d="M9 7V5.5a3 3 0 0 1 6 0V7"/>
+      </svg>
+      @if (cartService.getTotalQuantity() > 0) {
+        <span class="badge">{{ cartService.getTotalQuantity() }}</span>
+      }
+    </button>
 
   </div>
 </header>

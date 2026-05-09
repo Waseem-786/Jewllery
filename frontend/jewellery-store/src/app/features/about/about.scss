@@ -1,48 +1,4 @@
-/* =========================
-   HERO
-========================= */
-.hero {
-  position: relative;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.hero .bg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.hero .overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    rgba(0,0,0,0.4),
-    rgba(0,0,0,0.7)
-  );
-}
-
-.hero-content {
-  position: absolute;
-  bottom: 80px;
-  color: white;
-}
-
-.label {
-  color: var(--color-primary);
-  letter-spacing: 3px;
-  font-size: 12px;
-}
-
-.hero h1 {
-  font-size: 60px;
-  max-width: 600px;
-}
-
-.hero p {
-  margin-top: 10px;
-  font-size: 16px;
-}
+/* about-hero inherits .page-hero from styles.scss */
 
 /* =========================
    STORY
@@ -50,25 +6,63 @@
 .story {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  padding: 80px 0;
+  gap: 100px;
+  padding: 140px 0;
   align-items: center;
+  position: relative;
+}
+
+.story .text {
+  max-width: 460px;
+  justify-self: end;
+}
+
+.story .image {
+  max-width: 480px;
+}
+
+.story .image {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
 }
 
 .story img {
   width: 100%;
-  border-radius: 8px;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+  display: block;
+}
+
+.story .eyebrow {
+  display: block;
+  color: var(--color-primary);
+  font-size: 11px;
+  letter-spacing: 4px;
+  margin-bottom: 22px;
 }
 
 .story h2 {
-  font-size: 32px;
-  margin-bottom: 12px;
+  font-size: 48px;
+  margin-bottom: 28px;
+  line-height: 1.15;
+  font-weight: 400;
+}
+
+.story h2::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 1px;
+  background: var(--color-primary);
+  margin-top: 18px;
 }
 
 .story p {
   color: var(--color-muted);
-  line-height: 1.7;
-  margin-bottom: 10px;
+  line-height: 1.8;
+  margin-bottom: 16px;
+  font-size: 15px;
 }
 
 /* =========================
@@ -76,7 +70,8 @@
 ========================= */
 .immersive {
   position: relative;
-  height: 60vh;
+  height: 80vh;
+  min-height: 520px;
   overflow: hidden;
 }
 
@@ -84,6 +79,15 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.immersive-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.65),
+    rgba(0, 0, 0, 0.78)
+  );
 }
 
 .center-text {
@@ -97,10 +101,39 @@
 
   color: white;
   text-align: center;
+  padding: 0 var(--space-md);
+}
+
+.center-text .eyebrow {
+  display: block;
+  color: var(--color-primary);
+  font-size: 11px;
+  letter-spacing: 4px;
+  margin-bottom: 22px;
 }
 
 .center-text h2 {
-  font-size: 36px;
+  font-size: clamp(40px, 5vw, 72px);
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: 22px;
+  max-width: 720px;
+}
+
+.center-text h2::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 1px;
+  background: var(--color-primary);
+  margin: 22px auto 0;
+}
+
+.center-text p {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  max-width: 460px;
 }
 
 /* =========================
@@ -109,39 +142,87 @@
 .values {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
-  padding: 80px 0;
+  gap: 56px;
+  padding: 140px 0 160px;
+}
+
+.value {
+  text-align: center;
+}
+
+.value .img-frame {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--color-accent);
+  margin-bottom: 36px;
 }
 
 .value img {
   width: 100%;
-  margin-bottom: 10px;
-  border-radius: 6px;
+  height: 100%;
+  object-fit: cover;
+  margin: 0;
+  border-radius: 0;
+  display: block;
+  transition: transform 0.8s ease;
+}
+
+.value:hover img {
+  transform: scale(1.04);
 }
 
 .value h3 {
-  font-size: 18px;
-  margin-bottom: 6px;
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-style: italic;
+  font-weight: 400;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+  position: relative;
+}
+
+.value h3::before {
+  content: "";
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  margin: 0 auto 18px;
 }
 
 .value p {
   font-size: 14px;
   color: var(--color-muted);
+  line-height: 1.8;
+  max-width: 280px;
+  margin: 0 auto;
 }
 
 /* =========================
    FINAL
 ========================= */
 .final {
-  background: black;
+  background: #0b0b0b;
   color: white;
   text-align: center;
-  padding: 80px 0;
+  padding: 140px 0;
 }
 
 .final h2 {
-  font-size: 32px;
-  margin-bottom: 10px;
+  font-family: 'Playfair Display', serif;
+  font-size: 48px;
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+  line-height: 1.3;
+}
+
+.final p {
+  color: var(--color-primary);
+  font-size: 11px;
+  letter-spacing: 4px;
 }
 
 /* =========================

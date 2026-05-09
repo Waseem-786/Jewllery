@@ -1,0 +1,86 @@
+<section class="product-detail container">
+
+  <button class="back" (click)="goBack()" aria-label="Go back">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
+    Back
+  </button>
+
+  @if (loading()) {
+    <p class="status">Loading…</p>
+  } @else if (error()) {
+    <div class="missing">
+      <p>{{ error() }}</p>
+      <a routerLink="/shop" class="btn-outline">Continue Shopping</a>
+    </div>
+  } @else if (product(); as p) {
+
+    <div class="detail-grid">
+
+      <!-- IMAGE -->
+      <div class="media">
+        @if (p.badge) { <span class="badge">{{ p.badge }}</span> }
+        <img [src]="resolveImage(p.imageUrl)" [alt]="p.name">
+      </div>
+
+      <!-- INFO -->
+      <div class="info">
+        <span class="eyebrow">{{ p.categoryName }}</span>
+        <h1>{{ p.name }}</h1>
+
+        <div class="price-row">
+          <span class="price">Rs {{ p.price | number }}</span>
+          <span class="stock" [class.low]="p.stock > 0 && p.stock <= 3" [class.zero]="p.stock <= 0">
+            {{ stockLabel() }}
+          </span>
+        </div>
+
+        <p class="desc">{{ p.description }}</p>
+
+        <ul class="specs">
+          @if (p.material) { <li><span class="label">Material</span><span class="value">{{ p.material }}</span></li> }
+          @if (p.purity)   { <li><span class="label">Purity</span><span class="value">{{ p.purity }}</span></li> }
+          @if (p.weight)   { <li><span class="label">Weight</span><span class="value">{{ p.weight }} g</span></li> }
+        </ul>
+
+        @if (p.features.length) {
+          <div class="features">
+            <span class="features-eyebrow">DETAILS</span>
+            <ul>
+              @for (f of p.features; track f) {
+                <li>
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  {{ f }}
+                </li>
+              }
+            </ul>
+          </div>
+        }
+
+        <div class="qty-row">
+          <span class="qty-label">Quantity</span>
+          <div class="qty-control">
+            <button class="qty-btn" (click)="dec()" [disabled]="quantity() <= 1" aria-label="Decrease quantity">−</button>
+            <span class="qty-value">{{ quantity() }}</span>
+            <button class="qty-btn" (click)="inc()" [disabled]="p.stock <= 0 || quantity() >= p.stock" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn-outline lg" type="button" (click)="addToCart()" [disabled]="p.stock <= 0">
+            {{ p.stock > 0 ? 'Add to Cart' : 'Out of Stock' }}
+          </button>
+          <button class="btn-primary lg" type="button" (click)="buyNow()" [disabled]="p.stock <= 0">
+            Buy Now
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  }
+
+</section>

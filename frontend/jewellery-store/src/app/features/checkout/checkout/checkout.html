@@ -1,55 +1,136 @@
 <section class="checkout container">
-  <h2>Checkout</h2>
 
-  <div class="checkout-grid">
+  <header class="checkout-header">
+    <span class="eyebrow">FINAL STEP</span>
+    <h2>Checkout</h2>
+  </header>
+
+  @if (cartService.getItems().length === 0) {
+    <div class="empty">
+      <p>Your cart is empty. Add a piece before checking out.</p>
+      <button class="btn-outline" routerLink="/shop">Continue Shopping</button>
+    </div>
+  } @else {
+
+  <form class="checkout-grid" (ngSubmit)="placeOrder()" #f="ngForm">
 
     <!-- LEFT: FORM -->
     <div class="form">
 
-      <h3>Shipping Details</h3>
+      <!-- Contact -->
+      <fieldset class="block">
+        <legend>Contact</legend>
+        <div class="grid-2">
+          <div class="field" [class.has-error]="fieldErrors().customerName">
+            <label>Full Name</label>
+            <input type="text" name="name" [(ngModel)]="form.customerName" placeholder="Your full name" required>
+            @if (fieldErrors().customerName) { <span class="hint">{{ fieldErrors().customerName }}</span> }
+          </div>
+          <div class="field" [class.has-error]="fieldErrors().customerEmail">
+            <label>Email</label>
+            <input type="email" name="email" [(ngModel)]="form.customerEmail" placeholder="you@example.com" required>
+            @if (fieldErrors().customerEmail) { <span class="hint">{{ fieldErrors().customerEmail }}</span> }
+          </div>
+          <div class="field" [class.has-error]="fieldErrors().customerPhone">
+            <label>Phone</label>
+            <input type="tel" name="phone" [(ngModel)]="form.customerPhone" placeholder="+92 300 0000000" required>
+            @if (fieldErrors().customerPhone) { <span class="hint">{{ fieldErrors().customerPhone }}</span> }
+          </div>
+        </div>
+      </fieldset>
 
-      <div class="field">
-        <input type="text" placeholder="Full Name">
-      </div>
+      <!-- Shipping -->
+      <fieldset class="block">
+        <legend>Shipping Address</legend>
+        <div class="grid-2">
+          <div class="field full" [class.has-error]="fieldErrors().address">
+            <label>Address</label>
+            <input type="text" name="address" [(ngModel)]="form.address" placeholder="Street address" required>
+            @if (fieldErrors().address) { <span class="hint">{{ fieldErrors().address }}</span> }
+          </div>
+          <div class="field" [class.has-error]="fieldErrors().city">
+            <label>City</label>
+            <input type="text" name="city" [(ngModel)]="form.city" placeholder="Karachi" required>
+            @if (fieldErrors().city) { <span class="hint">{{ fieldErrors().city }}</span> }
+          </div>
+          <div class="field">
+            <label>Postal Code</label>
+            <input type="text" name="postal" [(ngModel)]="form.postal" placeholder="74000">
+          </div>
+          <div class="field full">
+            <label>Country</label>
+            <input type="text" name="country" [(ngModel)]="form.country">
+          </div>
+        </div>
+      </fieldset>
 
-      <div class="field">
-        <input type="text" placeholder="Phone Number">
-      </div>
+      <!-- Payment -->
+      <fieldset class="block">
+        <legend>Payment</legend>
+        <div class="payfast-card">
+          <div class="payfast-brand">
+            <span class="brand-name">PayFast</span>
+            <span class="brand-tag">SECURE CHECKOUT</span>
+          </div>
+          <p class="payfast-desc">
+            Pay securely with Visa, Mastercard, JazzCash, Easypaisa, or direct
+            bank transfer — all through PayFast Pakistan's hosted page.
+          </p>
+          <div class="payfast-methods">
+            <span>VISA</span>
+            <span>MASTERCARD</span>
+            <span>JAZZCASH</span>
+            <span>EASYPAISA</span>
+            <span>BANK</span>
+          </div>
+        </div>
+      </fieldset>
 
-      <div class="field">
-        <input type="text" placeholder="Address">
-      </div>
-
-      <div class="field">
-        <input type="text" placeholder="City">
-      </div>
-
-      <button class="btn-primary full">
-        Place Order
+      <button class="btn-primary full submit" type="submit" [disabled]="placing()">
+        {{ placing() ? 'Redirecting to PayFast…' : 'Pay with PayFast' }}
       </button>
 
     </div>
 
     <!-- RIGHT: ORDER SUMMARY -->
-    <div class="summary">
+    <aside class="summary">
 
       <h3>Your Order</h3>
 
       @for (item of cartService.getItems(); track item.name) {
-        <div class="item">
-          <span>{{ item.name }} × {{ item.quantity }}</span>
-          <span>Rs {{ item.price * item.quantity }}</span>
+        <div class="line-item">
+          <div class="thumb">
+            <img [src]="item.image" [alt]="item.name">
+            <span class="qty-bubble">{{ item.quantity }}</span>
+          </div>
+          <div class="meta">
+            <span class="name">{{ item.name }}</span>
+            <span class="price-row">Rs {{ item.price * item.quantity }}</span>
+          </div>
         </div>
       }
 
       <div class="divider"></div>
 
-      <div class="total">
+      <div class="row">
+        <span>Subtotal</span>
+        <span>Rs {{ total }}</span>
+      </div>
+      <div class="row">
+        <span>Shipping</span>
+        <span class="muted">Free</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="row total-row">
         <span>Total</span>
         <strong>Rs {{ total }}</strong>
       </div>
 
-    </div>
+    </aside>
 
-  </div>
+  </form>
+
+  }
 </section>

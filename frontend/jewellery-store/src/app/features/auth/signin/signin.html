@@ -5,39 +5,31 @@
     <span class="brand">AURUM</span>
 
     <h2>Welcome Back</h2>
-    <p class="subtitle">
-      Sign in to continue your luxury experience
-    </p>
-
-    <!-- SOCIAL -->
-    <div class="social-login">
-      <button class="google-btn">
-        <i class="fa-brands fa-google"></i>
-        Continue with Google
-      </button>
-
-      <button class="apple-btn">
-        <i class="fa-brands fa-apple"></i>
-        Continue with Apple
-      </button>
-    </div>
-
-    <div class="divider">
-      <span>or</span>
-    </div>
+    <p class="subtitle">Sign in to continue your luxury experience</p>
 
     <!-- FORM -->
-    <input type="email" placeholder="Email Address" [(ngModel)]="email" />
-    <input type="password" placeholder="Password" [(ngModel)]="password" />
-
-    <button class="primary-btn" (click)="login()">Sign In</button>
-
-    <div class="links">
-      <span>Forgot Password?</span>
+    <div class="field" [class.has-error]="fieldErrors().email">
+      <input type="email" placeholder="Email Address"
+             [(ngModel)]="email" name="email"
+             autocomplete="email" required />
+      @if (fieldErrors().email) { <span class="hint">{{ fieldErrors().email }}</span> }
     </div>
 
+    <div class="field" [class.has-error]="fieldErrors().password">
+      <input type="password" placeholder="Password"
+             [(ngModel)]="password" name="password"
+             autocomplete="current-password" required
+             (keyup.enter)="login()" />
+      @if (fieldErrors().password) { <span class="hint">{{ fieldErrors().password }}</span> }
+    </div>
+
+    <button class="primary-btn" type="button" (click)="login()" [disabled]="busy()">
+      {{ busy() ? 'Signing in…' : 'Sign In' }}
+    </button>
+
     <p class="extra">
-      Don’t have an account? <span class="link">Register</span>
+      Don’t have an account?
+      <a class="link" routerLink="/signup" [queryParams]="signupLink">Register</a>
     </p>
 
   </div>

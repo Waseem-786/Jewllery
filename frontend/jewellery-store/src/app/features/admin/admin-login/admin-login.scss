@@ -1,0 +1,89 @@
+.admin-login {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(180deg, #0d0d0d 0%, #1a1a1a 100%);
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: #111;
+  border: 1px solid #2a2a2a;
+  padding: 2.5rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: #f5e8c7;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+
+  h1 {
+    margin: 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    color: #d4af37;
+  }
+
+  .hint {
+    margin: 0;
+    color: #999;
+    font-size: 0.9rem;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #aaa;
+  }
+
+  input {
+    background: #1c1c1c;
+    border: 1px solid #333;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 1rem;
+
+    &:focus {
+      outline: none;
+      border-color: #d4af37;
+    }
+  }
+
+  .error {
+    color: #ff6b6b;
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  button[type='submit'] {
+    margin-top: 0.5rem;
+    background: #d4af37;
+    color: #000;
+    border: none;
+    padding: 0.85rem;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover:not(:disabled) {
+      background: #e8c252;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}

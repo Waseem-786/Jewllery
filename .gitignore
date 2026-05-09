@@ -1,0 +1,46 @@
+# ─── Claude Code / AI tooling (never commit) ──────────────────────────────
+.claude/
+.claude-code/
+.playwright-mcp/
+.review-screenshots/
+CLAUDE.local.md
+
+# ─── OS junk ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+$RECYCLE.BIN/
+
+# ─── Editors / IDEs ───────────────────────────────────────────────────────
+.idea/
+*.iml
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.swp
+*.swo
+.history/
+
+# ─── Loose root-level review artifacts ────────────────────────────────────
+# Screenshots taken during QA/review live in their own folders (gitignored
+# above) — anything left at the repo root is also a slip-up.
+/admin-overview.png
+/checkout-*.png
+/post-*.png
+/product-detail.png
+/*.tmp.*
+
+# ─── Misc env files (per-folder .env files are ignored in their own
+# subdirectory .gitignore — this catches stragglers at the root.) ─────────
+.env
+.env.local
+*.local
+
+# ─── Logs ─────────────────────────────────────────────────────────────────
+*.log
+logs/
+npm-debug.log*
+yarn-error.log

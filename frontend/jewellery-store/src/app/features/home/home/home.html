@@ -1,60 +1,143 @@
-<section class="hero">
-  <div class="overlay"></div>
+<!-- ===== HERO ===== -->
+<section class="page-hero hero">
+  <video class="hero-video"
+         autoplay muted [muted]="true" loop playsinline preload="auto"
+         poster="assets/hero.png"
+         (loadedmetadata)="$any($event.target).muted = true; $any($event.target).volume = 0">
+    <source src="assets/videos/Home.mp4" type="video/mp4">
+  </video>
 
-  <div class="content container">
-    <h1>Timeless Elegance</h1>
-    <p>Crafted with precision. Designed to shine forever.</p>
+  <div class="hero-overlay"></div>
 
-    <div class="actions">
-      <button class="btn-primary" routerLink="/shop">Shop Now</button>
-      <button class="btn-outline">Explore Collection</button>
+  <div class="hero-content container">
+    <span class="hero-eyebrow">AURUM ATELIER</span>
+    <h1>Timeless<br>Elegance</h1>
+    <p class="hero-sub">Crafted with precision. Designed to shine forever — for the moments worth remembering.</p>
+
+    <div class="hero-actions">
+      <button class="btn-primary" routerLink="/shop">Shop the Collection</button>
+      <button class="btn-outline" routerLink="/about">Our Story</button>
     </div>
   </div>
-</section>
-<section class="quote-section">
 
+  <div class="scroll-cue">DISCOVER</div>
+</section>
+
+<!-- ===== CATEGORIES ===== -->
+@if (featuredCategories().length > 0) {
+<section class="categories container">
+  <header class="section-header">
+    <span class="eyebrow">EXPLORE</span>
+    <h2>By Category</h2>
+    <p>Each piece, a quiet declaration.</p>
+  </header>
+
+  <div class="cat-grid">
+    @for (cat of featuredCategories(); track cat.id) {
+      <a class="cat-card" [routerLink]="['/shop']" [queryParams]="{ category: cat.id }">
+        <div class="cat-image">
+          <img [src]="resolveImage(cat.imageUrl)" [alt]="cat.name">
+        </div>
+        <div class="cat-meta">
+          <h3>{{ cat.name }}</h3>
+          <span class="cat-link">Shop {{ cat.name }} →</span>
+        </div>
+      </a>
+    }
+  </div>
+</section>
+}
+
+<!-- ===== QUOTE / IMMERSIVE BAND ===== -->
+<section class="quote-section">
   <div class="bg"></div>
   <div class="overlay"></div>
 
   <div class="quote-content container">
-    <h2>“Luxury is not seen. It is felt.”</h2>
+    <h2>"Luxury is not seen. It is felt."</h2>
     <span class="line"></span>
     <p>AURUM</p>
   </div>
-
 </section>
+
+<!-- ===== FEATURED COLLECTION ===== -->
 <section class="products container">
   <div class="section-header">
+    <span class="eyebrow">SIGNATURE PIECES</span>
     <h2>Featured Collection</h2>
-    <p>Discover pieces crafted for timeless beauty</p>
+    <p>Discover pieces crafted for timeless beauty.</p>
   </div>
 
-  <div class="grid">
-    @for (item of products; track item.name) {
-      <div class="product-card">
-        <div class="image-wrapper">
-          <!-- Main Image -->
-          <img class="main-img" [src]="item.image" alt="" />
+  @if (loading()) {
+    <p class="status">Loading…</p>
+  } @else if (error()) {
+    <p class="status error">{{ error() }}</p>
+  } @else if (featuredProducts().length === 0) {
+    <p class="status">No products yet — check back soon.</p>
+  } @else {
+    <div class="grid">
+      @for (item of featuredProducts(); track item.id) {
+        <div class="product-card" [routerLink]="['/shop']">
+          <div class="image-wrapper">
+            <img class="main-img" [src]="resolveImage(item.imageUrl)" [alt]="item.name" />
 
-          <!-- Hover Image -->
-          <img class="hover-img" [src]="item.hoverImage" alt="" />
+            @if (item.badge) {
+              <span class="card-badge">{{ item.badge }}</span>
+            }
 
-          <!-- Overlay Actions -->
-          <div class="overlay-actions">
-            <button class="quick-view">Quick View</button>
-            <button class="add-cart" (click)="addToCart(item); $event.stopPropagation()">
-              Add to Cart
-            </button>
+            <div class="overlay-actions">
+              <button class="add-cart"
+                      (click)="addToCart(item); $event.stopPropagation(); $event.preventDefault()"
+                      [disabled]="item.stock <= 0">
+                {{ item.stock > 0 ? 'Add to Cart' : 'Out of Stock' }}
+              </button>
+            </div>
+          </div>
+
+          <div class="info">
+            <h3>{{ item.name }}</h3>
+            <p class="price">Rs {{ item.price }}</p>
           </div>
         </div>
+      }
+    </div>
+  }
+</section>
 
-        <!-- Product Info -->
-        <div class="info">
-          <h3>{{ item.name }}</h3>
-          <p class="price">Rs {{ item.price }}</p>
-        </div>
-      </div>
-    }
+<!-- ===== EDITORIAL: DISCOVER THE CRAFT ===== -->
+<section class="editorial">
+  <div class="editorial-grid container">
+    <div class="editorial-image">
+      <img src="assets/c.png" alt="The atelier">
+    </div>
+
+    <div class="editorial-text">
+      <span class="eyebrow">THE ATELIER</span>
+      <h2>Discover<br>the Craft</h2>
+      <p>
+        For three generations our master artisans have shaped gold by hand,
+        setting each stone with the patience that only true craft demands.
+        Every AURUM piece begins with a sketch and ends in your hands —
+        an unbroken thread of devotion.
+      </p>
+      <p>
+        We believe a single jewel can hold a lifetime.
+      </p>
+      <a class="text-link" routerLink="/about">Read our story →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FINAL CTA ===== -->
+<section class="final-cta">
+  <div class="container">
+    <span class="eyebrow">PRIVATE APPOINTMENT</span>
+    <h2>Begin your story.</h2>
+    <p>Visit the AURUM atelier or speak privately with one of our jewellers.</p>
+    <div class="cta-actions">
+      <button class="btn-primary" routerLink="/shop">Shop Now</button>
+      <button class="btn-outline-light" routerLink="/about">Book Consultation</button>
+    </div>
   </div>
 </section>
 

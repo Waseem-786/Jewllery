@@ -1,77 +1,91 @@
-<section class="shop container">
+<!-- HERO -->
+<section class="page-hero shop-hero">
+  <video class="hero-video"
+         autoplay muted [muted]="true" loop playsinline preload="auto"
+         poster="assets/1bg.png"
+         (loadedmetadata)="$any($event.target).muted = true; $any($event.target).volume = 0">
+    <source src="assets/videos/Shop.mp4" type="video/mp4">
+  </video>
 
-  <!-- INTRO -->
-<section class="products-hero">
+  <div class="hero-overlay"></div>
 
-  <!-- SLIDER -->
-  <div class="slider">
-    <img src="assets/1bg.png" class="slide">
-    <img src="assets/2bg.png" class="slide">
-    <img src="assets/3bg.png" class="slide">
-  </div>
-
-  <!-- OVERLAY -->
-  <div class="overlay"></div>
-
-  <!-- CONTENT -->
-  <div class="content container">
-    <span class="label">COLLECTION</span>
-
+  <div class="hero-content container">
+    <span class="hero-eyebrow">THE COLLECTION</span>
     <h1>Our Jewellery</h1>
-
-    <p>
+    <p class="hero-sub">
       Explore a curated selection of timeless pieces crafted with precision,
-      designed to elevate your elegance and style.
+      designed to elevate your elegance.
     </p>
   </div>
 
+  <div class="scroll-cue">EXPLORE</div>
 </section>
+
+<section class="shop container">
 
   <!-- FILTER -->
   <div class="filter-bar">
     <span>FILTER</span>
 
-    <button (click)="setCategory('all')" [class.active]="selectedCategory==='all'">All</button>
-    <button (click)="setCategory('ring')" [class.active]="selectedCategory==='ring'">Rings</button>
-    <button (click)="setCategory('necklace')" [class.active]="selectedCategory==='necklace'">Necklaces</button>
-    <button (click)="setCategory('earring')" [class.active]="selectedCategory==='earring'">Earrings</button>
+    <button (click)="setCategory('all')" [class.active]="selectedCategoryId()==='all'">All</button>
+    @for (c of categories(); track c.id) {
+      <button (click)="setCategory(c.id)" [class.active]="selectedCategoryId()===c.id">{{ c.name }}</button>
+    }
   </div>
+
+  @if (loading()) {
+    <p class="status">Loading products…</p>
+  } @else if (error()) {
+    <p class="status error">{{ error() }}</p>
+  } @else if (filteredProducts().length === 0) {
+    <p class="status">No products in this category yet.</p>
+  } @else {
 
   <!-- PRODUCTS -->
   <div class="grid">
 
-    @for (item of filteredProducts; track item.name) {
+    @for (item of filteredProducts(); track item.id) {
       <div class="card">
 
-        <span class="badge">{{ item.badge }}</span>
+        @if (item.badge) { <span class="badge">{{ item.badge }}</span> }
 
-        <div class="image">
-          <img [src]="item.image" alt="">
-        </div>
+        <a class="image" [routerLink]="['/product', item.id]" [attr.aria-label]="'View ' + item.name">
+          <img [src]="resolveImage(item.imageUrl)" [alt]="item.name">
+        </a>
 
         <div class="info">
-          <h3>{{ item.name }}</h3>
+          <h3>
+            <a [routerLink]="['/product', item.id]">{{ item.name }}</a>
+          </h3>
           <p class="price">Rs {{ item.price }}</p>
         </div>
 
         <p class="desc">{{ item.description }}</p>
 
-<div class="features">
-  @for (f of item.features; track f) {
-    <div class="feature-item">
-      <i class="fa-solid fa-gem"></i>
-      <span>{{ f }}</span>
-    </div>
-  }
-</div>
+        <div class="features">
+          @for (f of item.features; track f) {
+            <div class="feature-item">
+              <i class="fa-solid fa-gem"></i>
+              <span>{{ f }}</span>
+            </div>
+          }
+        </div>
 
-        <button class="cta" (click)="addToCart(item)">
-          Add to Cart
-        </button>
+        <div class="card-actions">
+          <a class="cta cta-outline" [routerLink]="['/product', item.id]">View Detail</a>
+          <button class="cta cta-outline" type="button" (click)="addToCart(item)" [disabled]="item.stock <= 0">
+            {{ item.stock > 0 ? 'Add to Cart' : 'Out of Stock' }}
+          </button>
+          <button class="cta cta-primary" type="button" (click)="buyNow(item)" [disabled]="item.stock <= 0">
+            Buy Now
+          </button>
+        </div>
 
       </div>
     }
 
   </div>
+
+  }
 
 </section>

@@ -1,105 +1,93 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CartService } from '../../../core/cart';
+import { ProductService, Product } from '../../../core/products.service';
+import { CategoryService, Category } from '../../../core/categories.service';
+import { ToastService } from '../../../core/toast.service';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './products.html',
   styleUrls: ['./products.scss'],
 })
-export class Products {
+export class Products implements OnInit {
+  readonly products = signal<Product[]>([]);
+  readonly categories = signal<Category[]>([]);
+  readonly loading = signal(true);
+  readonly error = signal<string | null>(null);
+  readonly selectedCategoryId = signal<number | 'all'>('all');
 
-  constructor(private cartService: CartService) {}
+  readonly filteredProducts = computed(() => {
+    const sel = this.selectedCategoryId();
+    if (sel === 'all') return this.products();
+    return this.products().filter(p => p.categoryId === sel);
+  });
 
-  selectedCategory: string = 'all';
+  constructor(
+    private cartService: CartService,
+    private productService: ProductService,
+    private categoryService: CategoryService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private toast: ToastService,
+  ) {}
 
-  products = [
-    {
-      name: 'Diamond Ring',
-      price: 120000,
-      category: 'ring',
-      image: 'assets/p1.png',
-      badge: 'ROYAL',
-      description: 'A timeless diamond ring crafted with exceptional precision and designed to symbolize elegance, commitment, and brilliance.',
-      features: ['18K Gold', 'Certified Diamond', 'Handcrafted Finish']
-    },
-    {
-      name: 'Gold Necklace',
-      price: 95000,
-      category: 'necklace',
-      image: 'assets/p2.png',
-      badge: 'PREMIUM',
-      description: 'An elegant necklace blending traditional artistry with modern sophistication for a refined appearance.',
-      features: ['22K Gold', 'Lightweight', 'Premium Polish']
-    },
-    {
-      name: 'Luxury Earrings',
-      price: 70000,
-      category: 'earring',
-      image: 'assets/p3.png',
-      badge: 'SIGNATURE',
-      description: 'Minimal yet luxurious earrings designed for everyday elegance and comfort.',
-      features: ['Gold Plated', 'Skin Safe', 'Hand Polished']
-    },
-    {
-      name: 'Wedding Band',
-      price: 85000,
-      category: 'ring',
-      image: 'assets/p4.png',
-      badge: 'ROYAL',
-      description: 'A refined wedding band symbolizing unity, strength, and timeless beauty.',
-      features: ['18K Gold', 'Comfort Fit', 'Matte Finish']
-    },
-    {
-      name: 'Emerald Pendant',
-      price: 78000,
-      category: 'necklace',
-      image: 'assets/p2.png',
-      badge: 'PREMIUM',
-      description: 'A graceful pendant with gemstone detailing for a sophisticated and elegant look.',
-      features: ['Gemstone', 'Fine Finish', 'Elegant Design']
-    },
-    {
-      name: 'Stud Earrings',
-      price: 45000,
-      category: 'earring',
-      image: 'assets/p3.png',
-      badge: 'SIGNATURE',
-      description: 'Classic stud earrings with modern detailing for subtle luxury.',
-      features: ['Polished Gold', 'Comfort Wear', 'Lightweight']
-    },
-    {
-      name: 'Platinum Ring',
-      price: 150000,
-      category: 'ring',
-      image: 'assets/p1.png',
-      badge: 'ROYAL',
-      description: 'A premium platinum ring designed for those who appreciate rare elegance and durability.',
-      features: ['Platinum', 'High Durability', 'Luxury Finish']
-    },
-    {
-      name: 'Layered Necklace',
-      price: 67000,
-      category: 'necklace',
-      image: 'assets/p2.png',
-      badge: 'PREMIUM',
-      description: 'A modern layered necklace crafted to create a bold and elegant statement.',
-      features: ['Layered Style', 'Lightweight', 'Stylish Finish']
-    }
-  ];
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe(params => {
+      const raw = params.get('category');
+      if (raw && /^\d+$/.test(raw)) {
+        this.selectedCategoryId.set(Number(raw));
+      } else {
+        this.selectedCategoryId.set('all');
+      }
+    });
 
-  get filteredProducts() {
-    if (this.selectedCategory === 'all') return this.products;
-    return this.products.filter(p => p.category === this.selectedCategory);
+    this.productService.list().subscribe({
+      next: items => {
+        this.products.set(items);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.error.set('Could not load products. Make sure the API is running.');
+        this.loading.set(false);
+      },
+    });
+    this.categoryService.list().subscribe({
+      next: cats => this.categories.set(cats),
+      error: () => {/* non-fatal */ },
+    });
   }
 
-  setCategory(cat: string) {
-    this.selectedCategory = cat;
+  setCategory(id: number | 'all'): void {
+    this.selectedCategoryId.set(id);
   }
 
-  addToCart(product: any) {
-    this.cartService.addToCart(product);
+  resolveImage(url: string): string {
+    return this.productService.resolveImageUrl(url);
+  }
+
+  addToCart(p: Product): void {
+    if (p.stock <= 0) { this.toast.error('This piece is currently out of stock.'); return; }
+    this.cartService.addToCart({
+      productId: p.id,
+      name: p.name,
+      price: p.price,
+      image: this.resolveImage(p.imageUrl),
+    });
+    this.toast.success(`${p.name} added to your cart.`, 'Added');
+  }
+
+  buyNow(p: Product): void {
+    if (p.stock <= 0) { this.toast.error('This piece is currently out of stock.'); return; }
+    this.cartService.addToCart({
+      productId: p.id,
+      name: p.name,
+      price: p.price,
+      image: this.resolveImage(p.imageUrl),
+    });
+    this.router.navigate(['/checkout']);
   }
 }

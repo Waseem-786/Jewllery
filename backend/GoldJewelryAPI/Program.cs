@@ -1,4 +1,6 @@
+using GoldJewelryAPI.Configuration;
 using GoldJewelryAPI.Data;
+using GoldJewelryAPI.Services.Payments;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -6,6 +8,10 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// ─── Load .env (PayFast credentials, etc.) BEFORE the configuration is built ─
+DotEnv.Load(Path.Combine(builder.Environment.ContentRootPath, ".env"));
+builder.Configuration.AddEnvironmentVariables();
 
 // ─── Database ───────────────────────────────────────────────────────────────
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -31,12 +37,21 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 
+// ─── Payment Providers (PayFast only) ────────────────────────────────────────
+builder.Services.AddScoped<IPaymentProvider, PayFastProvider>();
+builder.Services.AddScoped<PaymentProviderRegistry>();
+builder.Services.AddHttpClient<PayFastCheckoutService>();
+
 // ─── CORS for Angular ────────────────────────────────────────────────────────
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
+        // Both hostnames the dev server can be served on (ng serve defaults to
+        // localhost; --host 127.0.0.1 also happens). Add prod origins here.
+        policy.WithOrigins(
+                  "http://localhost:4200",
+                  "http://127.0.0.1:4200")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -53,7 +68,6 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Backend API for Gold Jewelry e-commerce platform"
     });
 
-    // JWT auth in Swagger UI
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using Bearer scheme. Enter: Bearer {token}",
@@ -76,16 +90,15 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// ─── Seed Database ────────────────────────────────────────────────────────────
-/*
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await DataSeeder.SeedAsync(db);
 }
-*/
 
-// ─── Middleware Pipeline ──────────────────────────────────────────────────────
+var uploadsDir = Path.Combine(app.Environment.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"), "uploads");
+Directory.CreateDirectory(uploadsDir);
+
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -93,6 +106,7 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "swagger";
 });
 
+app.UseStaticFiles();
 app.UseCors("AllowAngular");
 app.UseAuthentication();
 app.UseAuthorization();
