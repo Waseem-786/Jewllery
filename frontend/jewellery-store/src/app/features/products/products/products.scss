@@ -82,6 +82,10 @@
   display: flex;
   flex-direction: column;
 
+  align-items: flex-start;
+
+  text-align: left;
+
   height: 100%;
 
   position: relative;
@@ -115,15 +119,15 @@
   color: var(--color-primary);
 
   padding: 0;
+}
 
-  &::after {
-    content: "";
-    display: block;
-    width: 18px;
-    height: 1px;
-    background: var(--color-primary);
-    margin-top: 4px;
-  }
+.badge::after {
+  content: "";
+  display: block;
+  width: 18px;
+  height: 1px;
+  background: var(--color-primary);
+  margin-top: 4px;
 }
 
 /* IMAGE — uniform 1:1 frame, photos cover the whole tile */
@@ -152,8 +156,11 @@
 .info {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+
+  align-items: flex-start;
+
+  text-align: left;
+
   gap: 6px;
 }
 
@@ -177,10 +184,14 @@
 .desc {
   font-size: 12px;
   color: var(--color-muted);
-  margin: 10px auto 14px;
+
+  margin: 10px 0 14px;
+
   line-height: 1.6;
-  text-align: center;
-  max-width: 90%;
+
+  text-align: left;
+
+  max-width: 100%;
 
   min-height: 38px;
 
@@ -219,7 +230,10 @@
   text-decoration: none;
   transition: color 0.25s ease;
 }
-.card .info h3 a:hover { color: var(--color-primary); }
+
+.card .info h3 a:hover {
+  color: var(--color-primary);
+}
 
 .card-actions {
   margin-top: auto;
@@ -228,7 +242,10 @@
   gap: 8px;
   width: 100%;
 }
-.card-actions .cta:first-child { grid-column: span 2; }
+
+.card-actions .cta:first-child {
+  grid-column: span 2;
+}
 
 .cta {
   display: inline-flex;
@@ -249,6 +266,7 @@
   background: transparent;
   color: var(--color-text);
 }
+
 .cta-outline:hover:not(:disabled) {
   background: var(--color-primary);
   color: #fff;
@@ -258,6 +276,7 @@
   background: var(--color-primary);
   color: #fff;
 }
+
 .cta-primary:hover:not(:disabled) {
   background: #b69356;
   border-color: #b69356;

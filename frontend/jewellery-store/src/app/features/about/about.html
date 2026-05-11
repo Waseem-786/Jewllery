@@ -1,91 +1,99 @@
-<section class="about">
+<section class="about-page">
 
   <!-- HERO -->
-  <section class="page-hero about-hero">
-    <video class="hero-video"
-           autoplay muted [muted]="true" loop playsinline preload="auto"
-           poster="assets/f.png"
-           (loadedmetadata)="$any($event.target).muted = true; $any($event.target).volume = 0">
-      <source src="assets/videos/Home.mp4" type="video/mp4">
-    </video>
+  <section class="about-hero">
 
+    <div class="hero-bg"></div>
     <div class="hero-overlay"></div>
 
     <div class="hero-content container">
-      <span class="hero-eyebrow">THE MAISON</span>
-      <h1>Jewellery That<br>Tells a Story</h1>
-      <p class="hero-sub">Crafted with precision. Designed to last beyond time.</p>
+
+      <span class="eyebrow">
+        THE MAISON
+      </span>
+
+      <h1>
+        Jewellery That<br>
+        Outlives Time
+      </h1>
+
+      <p>
+        Timeless craftsmanship shaped with elegance,
+        precision, and modern luxury.
+      </p>
+
     </div>
 
-    <div class="scroll-cue">OUR STORY</div>
+    <div class="hero-scroll">
+      Scroll to Discover
+    </div>
+
   </section>
 
-  <!-- STORY -->
-  <div class="story container">
 
-    <div class="text">
-      <span class="eyebrow">OUR PHILOSOPHY</span>
-      <h2>Not Just Jewellery</h2>
 
-      <p>
-        At AURUM, every piece is more than an accessory — it is a reflection of identity,
-        emotion, and timeless elegance. We believe jewellery should not just be worn,
-        but experienced.
-      </p>
+  <!-- FEATURES -->
+  <section class="features container">
 
-      <p>
-        Our creations are inspired by the harmony between tradition and modern design,
-        ensuring every piece remains relevant across generations.
-      </p>
-    </div>
+    <article class="feature-card">
 
-    <div class="image">
-      <img src="assets/b.png" alt="Solitaire ring">
-    </div>
+      <span class="number">01</span>
 
-  </div>
-
-  <!-- IMMERSIVE -->
-  <div class="immersive">
-    <img src="assets/c.png" alt="Crafted by masters">
-    <div class="immersive-overlay"></div>
-
-    <div class="center-text">
-      <span class="eyebrow">THE CRAFT</span>
-      <h2>Crafted by Masters</h2>
-      <p>Every curve, every detail, perfected by skilled artisans.</p>
-    </div>
-  </div>
-
-  <!-- VALUES -->
-  <div class="values container">
-
-    <div class="value">
-      <div class="img-frame"><img src="assets/a.png" alt="Precision"></div>
       <h3>Precision</h3>
-      <p>Every detail is refined to perfection.</p>
-    </div>
 
-    <div class="value">
-      <div class="img-frame"><img src="assets/e.png" alt="Elegance"></div>
+      <p>
+        Refined craftsmanship in every detail.
+      </p>
+
+    </article>
+
+    <article class="feature-card">
+
+      <span class="number">02</span>
+
       <h3>Elegance</h3>
-      <p>Designed to remain timeless across generations.</p>
-    </div>
 
-    <div class="value">
-      <div class="img-frame"><img src="assets/d.png" alt="Legacy"></div>
+      <p>
+        Timeless aesthetics inspired by modern luxury.
+      </p>
+
+    </article>
+
+    <article class="feature-card">
+
+      <span class="number">03</span>
+
       <h3>Legacy</h3>
-      <p>Jewellery that becomes part of your story.</p>
-    </div>
 
-  </div>
+      <p>
+        Designed to become part of your story.
+      </p>
+
+    </article>
+
+  </section>
+
 
   <!-- FINAL -->
-  <div class="final">
+  <section class="final-section">
+
     <div class="container">
-      <h2>Luxury is not seen. It is felt.</h2>
-      <p>Welcome to AURUM</p>
+
+      <span class="eyebrow">
+        AURUM
+      </span>
+
+      <h2>
+        Timeless Luxury.<br>
+        Modern Identity.
+      </h2>
+
+      <a routerLink="/shop" class="discover-btn">
+        Discover Collection
+      </a>
+
     </div>
-  </div>
+
+  </section>
 
 </section>

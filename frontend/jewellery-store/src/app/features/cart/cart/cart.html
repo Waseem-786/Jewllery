@@ -26,8 +26,13 @@
             <div class="details">
               <div class="line top">
                 <h3>{{ item.name }}</h3>
-                <button class="remove" (click)="remove(item)" aria-label="Remove from cart">Remove</button>
-              </div>
+<button 
+  class="remove-btn"
+  (click)="remove(item)"
+  aria-label="Remove {{ item.name }} from cart"
+>
+  <i class="fa-solid fa-trash"></i>
+</button>              </div>
 
               <p class="price">Rs {{ item.price }}</p>
 

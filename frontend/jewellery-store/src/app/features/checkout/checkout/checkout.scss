@@ -1,8 +1,17 @@
 .checkout {
   max-width: 1200px;
-  padding: calc(var(--header-offset) + 60px) 0 120px;
+
+  padding:
+    calc(var(--header-offset) + 60px)
+    clamp(24px, 5vw, 80px)
+    120px;
+
+  margin: 0 auto;
 }
 
+/* =========================
+   HEADER
+========================= */
 .checkout-header {
   text-align: center;
   margin-bottom: 72px;
@@ -10,188 +19,361 @@
 
 .checkout-header .eyebrow {
   display: block;
+
   color: var(--color-primary);
+
   font-size: 11px;
   letter-spacing: 4px;
+
   margin-bottom: 18px;
 }
 
 .checkout-header h2 {
   font-size: 48px;
   line-height: 1.1;
+
+  font-family: 'Playfair Display', serif;
 }
 
 .checkout-header h2::after {
   content: "";
+
   display: block;
+
   width: 48px;
   height: 1px;
+
   background: var(--color-primary);
+
   margin: 22px auto 0;
 }
 
-/* GRID */
+/* =========================
+   GRID
+========================= */
 .checkout-grid {
   display: grid;
+
   grid-template-columns: 1.4fr 1fr;
+
   gap: 80px;
+
   align-items: start;
 }
 
-/* FORM BLOCKS */
+/* =========================
+   FORM
+========================= */
 .form {
   display: flex;
   flex-direction: column;
+
   gap: 48px;
 }
 
+/* =========================
+   FORM BLOCKS
+========================= */
 .block {
-  border: none;
-  padding: 0;
-  margin: 0;
+  position: relative;
+
+  padding: 34px;
+
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,0.75),
+      rgba(246,241,234,0.96)
+    );
+
+  border: 1px solid rgba(0,0,0,0.05);
+
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.04);
+
+  overflow: hidden;
 }
 
+/* GOLD TOP LINE */
+.block::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      var(--color-primary),
+      transparent
+    );
+
+  opacity: 0.7;
+}
+
+/* =========================
+   SECTION HEADINGS
+========================= */
 .block legend {
   font-family: 'Playfair Display', serif;
-  font-size: 22px;
+
+  font-size: 28px;
   font-weight: 500;
-  letter-spacing: 0.4px;
-  margin-bottom: 28px;
-  position: relative;
+
+  letter-spacing: -0.3px;
+
+  color: #2d2926;
+
+  margin-bottom: 34px;
+
   padding: 0;
 }
 
 .block legend::after {
   content: "";
+
   display: block;
+
   width: 28px;
   height: 1px;
+
   background: var(--color-primary);
+
   margin-top: 12px;
 }
 
-/* GRID INSIDE BLOCK */
+/* =========================
+   GRID INSIDE BLOCK
+========================= */
 .grid-2 {
   display: grid;
+
   grid-template-columns: 1fr 1fr;
-  gap: 28px 32px;
+
+  gap: 32px;
 }
 
 .field.full {
   grid-column: 1 / -1;
 }
 
-/* INPUTS */
+/* =========================
+   FIELD
+========================= */
 .field {
   display: flex;
   flex-direction: column;
 }
 
+/* LABEL */
 .field label {
-  font-size: 10px;
-  letter-spacing: 2.5px;
+  font-size: 11px;
+
+  letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--color-muted);
-  margin-bottom: 10px;
+
+  color: #85796d;
+
+  margin-bottom: 12px;
+
+  font-weight: 700;
 }
 
+/* INPUT */
 .field input {
   width: 100%;
-  padding: 14px 0;
 
-  border: none;
-  border-bottom: 1px solid var(--color-border);
+  height: 60px;
+
+  padding: 0 18px;
+
+  border:
+    1px solid rgba(0,0,0,0.06);
+
+  border-radius: 16px;
+
   outline: none;
 
   font-family: 'Inter', sans-serif;
   font-size: 15px;
-  background: transparent;
+
+  background:
+    rgba(255,255,255,0.9);
+
   color: var(--color-text);
 
-  transition: border-color 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    transform 0.25s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
 }
 
+/* PLACEHOLDER */
 .field input::placeholder {
-  color: rgba(0, 0, 0, 0.28);
+  color: #a79d92;
 }
 
+/* FOCUS */
 .field input:focus {
-  border-bottom-color: var(--color-primary);
+  border-color: var(--color-primary);
+
+  background: #fff;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 10px 24px rgba(212,175,55,0.12);
 }
 
+/* ERROR */
 .field.has-error input {
-  border-bottom-color: #c97070;
+  border-color: #c97070;
 }
 
 .field .hint {
   font-size: 11px;
+
   letter-spacing: 0.3px;
+
   color: #c97070;
-  margin-top: 6px;
+
+  margin-top: 8px;
 }
 
-/* PAYFAST CARD */
+/* =========================
+   PAYFAST CARD
+========================= */
 .payfast-card {
-  border: 1px solid var(--color-border);
-  border-left: 2px solid var(--color-primary);
-  background: var(--color-accent);
-  padding: 24px 26px;
+  position: relative;
+
+  border: 1px solid rgba(0,0,0,0.05);
+
+  background:
+    linear-gradient(
+      145deg,
+      #f8f3eb,
+      #efe4d5
+    );
+
+  padding: 30px;
+
+  border-radius: 20px;
+
+  overflow: hidden;
+}
+
+/* GOLD SIDE LINE */
+.payfast-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 4px;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      to bottom,
+      var(--color-primary),
+      transparent
+    );
 }
 
 .payfast-brand {
   display: flex;
+
   align-items: baseline;
   justify-content: space-between;
+
   gap: 16px;
+
   margin-bottom: 14px;
 }
 
 .payfast-brand .brand-name {
   font-family: 'Playfair Display', serif;
+
   font-size: 22px;
+
   letter-spacing: 0.5px;
+
   color: var(--color-text);
 }
 
 .payfast-brand .brand-tag {
   font-size: 10px;
+
   letter-spacing: 3px;
+
   color: var(--color-primary);
 }
 
 .payfast-desc {
   font-size: 13px;
+
   line-height: 1.7;
+
   color: var(--color-muted);
+
   margin: 0 0 18px;
 }
 
 .payfast-methods {
   display: flex;
   flex-wrap: wrap;
+
   gap: 8px;
 }
 
 .payfast-methods span {
   font-size: 10px;
+
   letter-spacing: 1.5px;
+
   padding: 6px 12px;
+
   background: #fff;
+
   color: var(--color-text);
+
   border: 1px solid var(--color-border);
+
+  border-radius: 999px;
 }
 
-/* Form error */
+/* =========================
+   FORM ERROR
+========================= */
 .form-error {
   background: #fdecea;
+
   color: #b04545;
+
   border-left: 2px solid #b04545;
+
   padding: 12px 16px;
+
   font-size: 13px;
   letter-spacing: 0.3px;
+
+  border-radius: 8px;
 }
 
-/* Empty cart on checkout */
+/* =========================
+   EMPTY STATE
+========================= */
 .empty {
   text-align: center;
   padding: 60px 0;
@@ -199,79 +381,137 @@
 
 .empty p {
   font-size: 15px;
+
   color: var(--color-muted);
+
   margin-bottom: 24px;
 }
 
-/* SUBMIT */
+/* =========================
+   SUBMIT BUTTON
+========================= */
 .submit {
-  margin-top: 24px;
+  margin-top: 18px;
+
   width: 100%;
-  padding: 18px;
+  height: 62px;
+
+  border-radius: 16px;
+
   font-size: 12px;
   letter-spacing: 3px;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
-/* ===== SUMMARY ===== */
+.submit:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 14px 30px rgba(0,0,0,0.12);
+}
+
+/* =========================
+   SUMMARY
+========================= */
 .summary {
   position: sticky;
+
   top: calc(var(--header-offset) + 20px);
 
   background: #0b0b0b;
+
   color: #fff;
+
   padding: 40px 36px;
+
+  border-radius: 24px;
+
+  border: 1px solid rgba(255,255,255,0.06);
+
+  box-shadow:
+    0 20px 50px rgba(0,0,0,0.18);
 }
 
 .summary h3 {
   font-family: 'Playfair Display', serif;
+
   font-size: 22px;
   font-weight: 500;
+
   letter-spacing: 0.5px;
+
   margin-bottom: 32px;
 }
 
 .summary h3::after {
   content: "";
+
   display: block;
+
   width: 32px;
   height: 1px;
+
   background: var(--color-primary);
+
   margin-top: 14px;
 }
 
+/* =========================
+   LINE ITEMS
+========================= */
 .line-item {
   display: flex;
+
   align-items: center;
+
   gap: 16px;
+
   margin-bottom: 20px;
 }
 
 .line-item .thumb {
   position: relative;
+
   width: 54px;
   height: 54px;
+
   background: rgba(255,255,255,0.06);
+
+  border-radius: 12px;
+
   flex-shrink: 0;
+
   overflow: hidden;
 }
 
 .line-item .thumb img {
   width: 100%;
   height: 100%;
+
   object-fit: cover;
 }
 
 .qty-bubble {
   position: absolute;
+
   top: -8px;
   right: -8px;
+
   width: 22px;
   height: 22px;
+
   border-radius: 50%;
+
   background: var(--color-primary);
+
   color: #0b0b0b;
+
   font-size: 11px;
   font-weight: 600;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -279,38 +519,59 @@
 
 .line-item .meta {
   flex: 1;
+
   display: flex;
+
   justify-content: space-between;
   align-items: center;
+
   gap: 12px;
 }
 
 .line-item .name {
   font-size: 13px;
+
   color: rgba(255,255,255,0.85);
+
   letter-spacing: 0.3px;
 }
 
 .line-item .price-row {
   font-family: 'Playfair Display', serif;
+
   font-size: 14px;
+
   color: #fff;
+
   white-space: nowrap;
 }
 
+/* =========================
+   DIVIDER
+========================= */
 .summary .divider {
   height: 1px;
+
   background: rgba(255,255,255,0.12);
+
   margin: 24px 0;
 }
 
+/* =========================
+   ROWS
+========================= */
 .summary .row {
   display: flex;
+
   justify-content: space-between;
   align-items: center;
+
   font-size: 13px;
+
   letter-spacing: 0.3px;
+
   color: rgba(255,255,255,0.85);
+
   margin-bottom: 14px;
 }
 
@@ -318,31 +579,68 @@
   color: rgba(255,255,255,0.55);
 }
 
+/* =========================
+   TOTAL
+========================= */
 .summary .total-row {
   font-size: 14px;
+
   letter-spacing: 1.5px;
   text-transform: uppercase;
+
   color: #fff;
+
   margin-bottom: 0;
 }
 
 .summary .total-row strong {
   font-family: 'Playfair Display', serif;
+
   font-size: 22px;
   font-weight: 500;
+
   color: var(--color-primary);
+
   letter-spacing: 0.5px;
 }
 
+/* =========================
+   RESPONSIVE
+========================= */
 @media (max-width: 900px) {
+
   .checkout-grid {
     grid-template-columns: 1fr;
     gap: 56px;
   }
+
   .summary {
     position: static;
   }
+
   .grid-2 {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .checkout {
+    padding:
+      calc(var(--header-offset) + 40px)
+      20px
+      80px;
+  }
+
+  .checkout-header h2 {
+    font-size: 38px;
+  }
+
+  .block {
+    padding: 24px;
+  }
+
+  .summary {
+    padding: 28px 24px;
   }
 }
